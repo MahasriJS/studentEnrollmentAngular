@@ -1,0 +1,71 @@
+
+  .required {
+    color: red;
+  }
+ h3{
+  text-align: center;
+ }
+  select {
+    width: 50%;
+    height: 34px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: black;
+    background-color: #fff;
+    border: 3px solid rgb(84, 73, 116);
+    border-radius: 4px;
+  }
+  
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+  }
+  
+  .card-header{
+    font-weight: bold;
+    background-color: rgb(89, 141, 214);
+  }
+  .card-body{
+    background-color: rgb(3, 26, 59);
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    color:white;
+  }
+  
+  .form-group input {
+    border-radius: 5px;
+    color: wheat;
+  }
+ 
+  #enroll {
+    margin-top: 20px;
+    margin-left: 145px;
+  }
+  #reset {
+    margin-top: 20px;
+    margin-left: 50px;
+  }
+  th{
+    color: rgb(231, 195, 147);
+  }
+  td{
+    color: white;
+  }
+  .schedule{
+    margin-top: 100px;
+  }
+
+  #button{
+    margin-top: 100px;
+  }
+  .warning-message {
+    background-color: #ffc107;
+    color: #0f0f0f;
+    font-weight: bold;
+    padding: 50px;
+    text-align: center;
+    margin-top: 200px;
+  }

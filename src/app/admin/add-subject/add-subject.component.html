@@ -1,0 +1,103 @@
+<app-navbar></app-navbar>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-header">
+              <h3>Add Subject</h3>
+            </div>
+            <div class="card-body">
+<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <div class="row">
+    <label class="col-md-4" for="name">Name:<span class="required">*</span></label>
+    <input class="col-md-6" id="name" type="text" formControlName="name" placeholder="Enter the subject name" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.name.touched) && reactiveFormControl.name.errors?.required">
+    Name is required
+    </span>    
+</div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+    <label class="col-md-4" for="code">Code:<span class="required">*</span></label>
+    <input class="col-md-6" type="text" id="code" name="code" formControlName="code" placeholder="Enter the subject code" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.code.touched) && reactiveFormControl.code.errors?.required">
+    Code is required
+    </span>   
+</div>
+</div>
+   <div class="form-group">
+    <div class="row">
+    <label class="col-md-4" for="credits">Credits:<span class="required">*</span></label>
+    <input class="col-md-6" type="number" id="credits" name="credits" formControlName="credits" placeholder="Enter the subject credits" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.credits.touched) && reactiveFormControl.credits.errors?.required">
+    Credits is required
+    </span>    
+</div>
+</div>
+    <div class="form-group">
+        <label for="department">Select Department:<span class="required">*</span></label>
+        <select id="department" formControlName="department" placeholder="Select your Department" required>
+            <option selected>Select Department</option>
+            <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
+        </select>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.department.touched) && reactiveFormControl.department.errors?.required">
+        Department is required
+        </span> 
+    </div>
+    
+    <div class="form-group">
+        <label for="courseType">Select Course Type:<span class="required">*</span></label>
+        
+        <select id="courseType" formControlName="courseType"  placeholder="Select your Course Type" required
+            (change)="getCoursesByDepartmentAndCourseType(reactiveForm.get('department').value, $event.target.value)">
+            <option selected>Select Course Type</option>
+            <option *ngFor="let courseType of courseTypes" [value]="courseType.id">{{courseType.courseTypeName}}
+            </option>
+            
+        </select>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.courseType.touched) && reactiveFormControl.courseType.errors?.required">
+       Course Type is required
+        </span> 
+    </div>
+   
+    <div class="form-group">
+        <label for="course">Select Course:<span class="required">*</span></label>
+        
+        <select id="course" formControlName="course"  placeholder="Select your Course" required
+            (change)="getSemestersByCourseType(reactiveForm.get('courseType').value)">
+            <option selected>Select Course</option>
+            <option *ngFor="let course of courses" [value]="course.id">{{course.name}}</option>
+        </select>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.course.touched) && reactiveFormControl.course.errors?.required">
+       Course is required
+        </span> 
+    </div >
+   
+    <div class="form-group">
+        <label for="semester">Select Semester:<span class="required">*</span></label>
+        <select id="semester" formControlName="semester"  placeholder="Select your Semester" required>
+            <option selected>Select Semester</option>
+            <option *ngFor="let semester of semesters" [value]="semester.id">{{semester.name}}</option>
+        </select>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.semester.touched) && reactiveFormControl.semester.errors?.required">
+       Semester is required
+        </span> 
+    </div>
+  
+    <button type="submit" class="btn btn-primary" id="add">Add Subject</button>
+    &nbsp;
+    <button type="reset" class="btn btn-primary" id="reset">Reset</button>   
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>

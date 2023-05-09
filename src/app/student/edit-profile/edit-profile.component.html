@@ -1,0 +1,60 @@
+
+<app-nav-bar></app-nav-bar>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-header">
+              <h3>Edit Profile</h3>
+            </div>
+            <div class="card-body">
+<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+    <label for="name">Name:</label>
+    <input id="name" type="text" formControlName="name" placeholder="Enter your name" required [(ngModel)]="student.name">
+    </div>
+    <div class="form-group">
+    <label for="dob">Date of Birth:</label>
+    <input id="dob" type="date" formControlName="dob" placeholder="Select date of birth" required [(ngModel)]="student.dob">
+    </div>
+    <div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" formControlName="email" placeholder="Enter your Email" required [(ngModel)]="student.email">
+    </div>
+    <div class="form-group">
+    <label for="phno">Phone:</label>
+    <input type="tel" id="phno" name="phno" formControlName="phno" placeholder="Enter your Phone Number" required [(ngModel)]="student.phno">
+   </div>
+    <div class="form-group">
+    <label for="address">Address:</label>
+    <textarea id="address" formControlName="address" placeholder="Enter your Address" required [(ngModel)]="student.address"></textarea>
+    </div>
+    <div class="form-group">
+    <label for="dateOfJoining">Date of Joining:</label>
+    <input id="dateOfJoining" type="date" formControlName="dateOfJoining" placeholder="Enter your Date Of Joining" required [(ngModel)]="student.dateOfJoining">
+    </div>
+    <!-- <div class="form-group">
+        <label for="academicYear">Academic year:<span class="required">*</span></label>
+        <select class="form-select academic-year" aria-label="Academic Year"  formControlName="academicYear"  placeholder="Select academicYear" required [(ngModel)]="student.academicYear">
+            <option>Select Academic Year</option>
+            <option value="2019-2023">2023-2027</option>
+            <option value="2019-2023">2022-2026</option>
+            <option value="2019-2023">2021-2025</option>
+            <option value="2019-2023">2020-2024</option>
+            <option value="2019-2023">2019-2023</option>
+            <option value="2018-2022">2018-2022</option>
+            <option value="2017-2021">2017-2021</option>
+            <option value="2016-2020">2016-2020</option>
+            <option value="2015-2019">2015-2019</option>
+          </select>
+        </div> -->
+    <button type="submit" class="btn btn-primary" id="edit">Save</button>
+    &nbsp;
+    
+    <button type="reset" class="btn btn-primary" id="reset">Reset</button>   
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>

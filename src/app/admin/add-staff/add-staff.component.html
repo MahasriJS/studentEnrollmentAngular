@@ -1,0 +1,97 @@
+<p>add-staff works!</p>
+<app-navbar></app-navbar>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-header">
+              <h3>Add Staff</h3>
+            </div>
+            <div class="card-body">
+<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+    <label for="name">Name:<span class="required">*</span></label>
+    <input id="name" type="text" formControlName="name" placeholder="Enter your name" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.name.touched) && reactiveFormControl.name.errors?.required">
+    Name is required
+</span>  
+    </div>
+    <div class="form-group">
+    <label for="dob">Date of Birth:<span class="required">*</span></label>
+    <input id="dob" type="date" formControlName="dob" placeholder="Select date of birth" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.dob.touched) && reactiveFormControl.dob.errors?.required">
+    Date of Birth is required
+    </span> 
+    </div>
+    <div class="form-group">
+    <label for="email">Email:<span class="required">*</span></label>
+    <input type="email" id="email" name="email" formControlName="email" placeholder="Enter your Email" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.email.touched) && reactiveFormControl.email.errors?.required">
+    Email is required
+    </span>      
+</div>
+    <div class="form-group">
+    <label for="phno">Phone:<span class="required">*</span></label>
+    <input type="text" id="phno" name="phno" formControlName="phno" placeholder="Enter your Phone Number" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.phno.touched) && reactiveFormControl.phno.errors?.required">
+    Phone Number is required
+    </span>     
+</div>
+    <div class="form-group">
+    <label for="address">Address:<span class="required">*</span></label>
+    <textarea id="address" formControlName="address" placeholder="Enter your Address" required></textarea>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.address.touched) && reactiveFormControl.address.errors?.required">
+    Address is required
+    </span>     
+</div>
+   
+    <div class="form-group">
+    <label for="dateofjoining">Date of Joining:<span class="required">*</span></label>
+    <input id="dateofjoining" type="date" formControlName="dateofjoining" placeholder="Enter your Date Of Joining" required>
+    <span class="text-danger"
+    *ngIf="(reactiveFormControl.dateofjoining.touched) && reactiveFormControl.dateofjoining.errors?.required">
+    Date of Joining is required
+    </span>     
+</div>
+    <div class="form-group">
+        <label for="salary">Salary:<span class="required">*</span></label>
+        <input id="salary" type="text" formControlName="salary" placeholder="Enter your salary" required>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.salary.touched) && reactiveFormControl.salary.errors?.required">
+        Salary is required
+        </span>     
+    </div>
+    <div class="form-group">
+        <label for="designation">Designation:<span class="required">*</span></label>
+        <input id="designation" type="text" formControlName="designation" placeholder="Enter your designation" required>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.designation.touched) && reactiveFormControl.designation.errors?.required">
+        Designation is required
+        </span>     
+    </div>
+    <div class="form">
+        <label for="department">Select Department:<span class="required">*</span></label>
+        <select id="department" formControlName="department" placeholder="Select your Department" required>
+            <option disabled selected>Select Department</option>
+            <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
+        </select>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.department.touched) && reactiveFormControl.department.errors?.required">
+        Department is required
+        </span> 
+    </div>
+   
+    <button type="submit" class="btn btn-primary" id="add">Add Staff</button>
+    <button type="reset" class="btn btn-primary" id="reset">Reset</button>
+    
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>

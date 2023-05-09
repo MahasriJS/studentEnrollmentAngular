@@ -1,1 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    background-image: url("C:/Users/MahasriSrikanth/project/studentEnrollment/src/assets/bg.jpeg");
+    background-repeat: repeat;
+    background-size: cover;
+  }
