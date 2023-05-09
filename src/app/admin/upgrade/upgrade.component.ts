@@ -26,20 +26,20 @@ export class UpgradeComponent implements OnInit {
   courses: Course[];
   semesters: Semester[];
   courseTypes: CourseType[];
-  academicYears:string[];
-  
+  academicYears: string[];
 
-  constructor( private departmentService: DepartmentService,
+
+  constructor(private departmentService: DepartmentService,
     private courseTypeService: CoursetypeService,
     private courseService: CourseService,
-    private semesterService: SemesterService,private studentService: StudentService,
+    private semesterService: SemesterService, private studentService: StudentService,
     private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.studentService.getAcademicYear()
-    .subscribe((response: any) => {
-      this.academicYears = response.data;
-    });
+      .subscribe((response: any) => {
+        this.academicYears = response.data;
+      });
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
@@ -53,7 +53,7 @@ export class UpgradeComponent implements OnInit {
       courseType: new FormControl(null, Validators.required),
       course: new FormControl(null, Validators.required),
       semester: new FormControl(null, Validators.required),
-      academicYear: new FormControl(null,Validators.required)
+      academicYear: new FormControl(null, Validators.required)
     });
   }
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
@@ -71,22 +71,25 @@ export class UpgradeComponent implements OnInit {
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit() :void{
-    const academicYear=this.reactiveForm.get('academicYear').value;
-    const deptId=this.reactiveForm.get('department').value;
+  onSubmit(): void {
+    const academicYear = this.reactiveForm.get('academicYear').value;
+    const deptId = this.reactiveForm.get('department').value;
     const courseTypeId = this.reactiveForm.get('courseType').value;
     const courseId = this.reactiveForm.get('course').value;
     const semId = this.reactiveForm.get('semester').value;
-    if(courseTypeId==1 && semId<8 || courseTypeId==2 && semId<12){
-    this.studentService.upgrade(academicYear,Number(deptId),Number(courseId),Number(semId)).subscribe((response: any) => {
-      //this.student = response.data;
-      if (response.data === true) {
-      alert("Upgrade Successfully!!");
-      }
-    });
-  }
-  else{
-    this.toastrService.error("Unable to Upgrade");
-  }
+    if (courseTypeId == 1 && semId < 8 || courseTypeId == 2 && semId < 12) {
+      this.studentService.upgrade(academicYear, Number(deptId), Number(courseId), Number(semId)).subscribe((response: any) => {
+        //this.student = response.data;
+        if (response.data === true) {
+          alert("Upgrade Successfully!!");
+        }
+        if (response.data === false) {
+          this.toastrService.error("Unable to Upgrade");
+        }
+      });
+    }
+    // else{
+    //   this.toastrService.error("Unable to Upgrade");
+    // }
   }
 }

@@ -39,26 +39,26 @@ export class StaffAssignListComponent implements OnInit {
 
   ngOnInit() {
     this.departmentService.getDepartments()
-    .subscribe((response: any) => {
-      this.departments = response.data;
-    });
+      .subscribe((response: any) => {
+        this.departments = response.data;
+      });
     this.courseTypeService.getCourseTypes()
-    .subscribe((response: any) => {
-      this.courseTypes = response.data;
+      .subscribe((response: any) => {
+        this.courseTypes = response.data;
+      });
+    this.reactiveForm = new FormGroup({
+      department: new FormControl(null, Validators.required),
+      courseType: new FormControl(null, Validators.required),
+      course: new FormControl(null, Validators.required),
+      semester: new FormControl(null, Validators.required),
+      subject: new FormControl('')
     });
-  this.reactiveForm = new FormGroup({
-    department: new FormControl(null, Validators.required),
-    courseType: new FormControl(null, Validators.required),
-    course: new FormControl(null, Validators.required),
-    semester: new FormControl(null, Validators.required),
-    subject:new FormControl('')
-  });  
   }
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
     this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
       this.courses = response.data;
     });
-    
+
   }
 
   getSemestersByCourseType(courseTypeId: number): void {
@@ -66,30 +66,30 @@ export class StaffAssignListComponent implements OnInit {
       this.semesters = response.data;
     });
   }
-  getSubjectByCourseAndSemester(courseId:number, semId:number):void{
-    this.subjectService.getSubjects(Number(courseId),Number(semId)).subscribe((response:any) =>{
-      this.subjects=response.data;
+  getSubjectByCourseAndSemester(courseId: number, semId: number): void {
+    this.subjectService.getSubjects(Number(courseId), Number(semId)).subscribe((response: any) => {
+      this.subjects = response.data;
     });
   }
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
   onSubmit(): void {
-    
+
     const subjectId = this.reactiveForm.get('subject').value;
     this.staffService.getAssignedStaff(Number(subjectId)).subscribe((response: any) => {
-    this.staffs = response.data;
-    if(response.statusCode===200){
-      this.showTable = true;
-      // this.toastrService.success("Staff retrieved Sucessfully!!")
-    }
-    if(response.statusCode===200 && response.message==="Staffs Not Found"){
-      this.toastrService.warning("No Data Found")
-    }
-  },(err:HttpErrorResponse)=>{
-    if(err.status === 422){
-      alert("Please enter the required values");
-    }
+      this.staffs = response.data;
+      if (response.statusCode === 200) {
+        this.showTable = true;
+        // this.toastrService.success("Staff retrieved Sucessfully!!")
+      }
+      if (response.statusCode === 200 && response.message === "Staffs Not Found") {
+        this.toastrService.warning("No Data Found")
+      }
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        alert("Please enter the required values");
+      }
     });
   }
 }

@@ -15,7 +15,7 @@ export class AdminLoginComponent implements OnInit {
 
   reactiveForm: FormGroup;
   //staff: Staff;
-  staff:number;
+  staff: number;
   constructor(private staffService: StaffService, private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit() {
@@ -30,19 +30,19 @@ export class AdminLoginComponent implements OnInit {
   onSubmit(): void {
     const email = this.reactiveForm.get('email').value;
     const password = this.reactiveForm.get('password').value;
-    const userType="Admin";
-    this.staffService.adminLogin(email,password,userType).subscribe((response: any) => {
+    const userType = "Admin";
+    this.staffService.adminLogin(email, password, userType).subscribe((response: any) => {
       this.staff = response.data;
-      const id=this.staff;
-      localStorage.setItem('id',id.toString());
-      if(response.statusCode===200 && response.message==="Login Successfully!!"){
-      this.router.navigate(['/home']);
+      const id = this.staff;
+      localStorage.setItem('id', id.toString());
+      if (response.statusCode === 200 && response.message === "Login Successfully!!") {
+        this.router.navigate(['/home']);
       }
     }, (err: HttpErrorResponse) => {
-      if (err.status === 422 && err.error.message==="staff not found") {
-      this.toastrService.error("Not found");
+      if (err.status === 422 && err.error.message === "staff not found") {
+        this.toastrService.error("Not found");
       }
-      if (err.status === 422 && err.error.message==="Invalid username or password") {
+      if (err.status === 422 && err.error.message === "Invalid username or password") {
         this.toastrService.error("Invaild email or Password");
       }
     });

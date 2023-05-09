@@ -32,6 +32,78 @@
     <label for="dateOfJoining">Date of Joining:</label>
     <input id="dateOfJoining" type="date" formControlName="dateOfJoining" placeholder="Enter your Date Of Joining" required [(ngModel)]="student.dateOfJoining">
     </div>
+    <div class="form">
+      <label for="academicYear">Select Academic Year:</label>
+      <select id="academicYear" formControlName="academicYear" [(ngModel)]="student.academicYear">
+          <!-- <option>Select Academic Year</option> -->
+          <option *ngFor="let academicYear of academicYears" [ngValue]="academicYear">{{academicYear}}</option>
+      </select>
+  </div>
+  <div class="form">
+    <label for="department">Select Department:</label>
+    <select id="department" formControlName="department" placeholder="Select your Department"
+        required [(ngModel)]="student.department.name">
+        <option>Select Department</option>
+        <option *ngFor="let department of departments" [value]="department.id">
+            {{department.name}}</option>
+    </select>
+</div>
+
+<div class="form">
+    <label for="courseType">Select Course Type:</label>
+    <select id="courseType" formControlName="courseType" placeholder="Select your Course Type"
+        required
+        (change)="getCoursesByDepartmentAndCourseType(reactiveForm.get('department').value, $event.target.value)">
+        <option>Select Course Type</option>
+        <option *ngFor="let courseType of courseTypes" [value]="courseType.id">
+            {{courseType.courseTypeName}}
+        </option>
+    </select>
+</div>
+<div class="form">
+    <label for="course">Select Course:</label>
+    <select id="course" formControlName="course" placeholder="Select your Course" required
+        (change)="getSemestersByCourseType(reactiveForm.get('courseType').value)">
+        <option disabled selected>Select Course</option>
+        <option *ngFor="let course of courses" [value]="course.id">{{course.name}}</option>
+    </select>
+</div>
+<div class="form">
+    <label for="semester">Select Semester:</label>
+    <select id="semester" formControlName="semester" placeholder="Select your Semester"
+        required>
+        <option disabled selected>Select Semester</option>
+        <option *ngFor="let semester of semesters" [value]="semester.id">{{semester.name}}
+        </option>
+    </select>
+</div>
+      <!-- <div class="form">
+        <label for="department">Select Department:</label>
+        <select id="department" formControlName="department" placeholder="Select your Department"
+            required [(ngModel)]="student.department.name">
+            <option>Select Department</option>
+            <option *ngFor="let department of departments"[value]="department.id">
+                {{department.name}}</option>
+        </select>
+    </div>
+    
+    <div class="form">
+        <label for="course">Select Course:</label>
+        <select id="course" formControlName="course" placeholder="Select your Course" required [(ngModel)]="student.course.name"
+            (change)="getSemestersByCourseType(reactiveForm.get('courseType').value)">
+            <option>Select Course</option>
+            <option *ngFor="let course of courses" [ngValue]="course" [value]="course.id">{{course.name}}</option>
+        </select>
+    </div> -->
+    <!-- <div class="form">
+        <label for="semester">Select Semester:</label>
+        <select id="semester" formControlName="semester" placeholder="Select your Semester"
+            required>
+            <option disabled selected>Select Semester</option>
+            <option *ngFor="let semester of semesters" [value]="semester.id">{{semester.name}}
+            </option>
+        </select>
+    </div> -->
     <button type="submit" class="btn btn-primary" id="edit">Edit Student</button>
   
     <button type="reset" class="btn btn-primary" id="reset">Reset</button>   

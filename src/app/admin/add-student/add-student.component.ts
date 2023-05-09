@@ -31,13 +31,7 @@ export class AddStudentComponent implements OnInit {
 
   constructor(private departmentService: DepartmentService, private studentService: StudentService,
     private courseTypeService: CoursetypeService, private courseService: CourseService, private fb: FormBuilder,
-    private semesterService: SemesterService,private router: Router, private toastrService:ToastrService) {
-    this.reactiveForm = this.fb.group({
-      deptId: [''],
-      courseType: [''],
-      courseId: [''],
-      semId: ['']
-    });
+    private semesterService: SemesterService, private router: Router, private toastrService: ToastrService) {
   }
 
 
@@ -49,7 +43,7 @@ export class AddStudentComponent implements OnInit {
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
-      });    
+      });
     this.reactiveForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
@@ -63,7 +57,7 @@ export class AddStudentComponent implements OnInit {
       dob: new FormControl(null, Validators.required),
       academicyear: new FormControl(null, Validators.required),
       dateofjoining: new FormControl(null, Validators.required)
-    
+
     });
   }
   get reactiveFormControl() {
@@ -83,7 +77,7 @@ export class AddStudentComponent implements OnInit {
     });
   }
 
-  onSubmit() :void{
+  onSubmit(): void {
     console.log(this.reactiveForm);
     const student: Student = {
       name: this.reactiveForm.value.name,
@@ -98,27 +92,32 @@ export class AddStudentComponent implements OnInit {
       deptId: this.reactiveForm.get('department').value,
       courseId: this.reactiveForm.get('course').value,
       semId: this.reactiveForm.get('semester').value,
+      type: "Student"
     };
-    
+
     console.log(student);
     this.studentService.addStudent(student)
       .subscribe(data => {
         console.log(data);
-        if(data.statusCode === 200){
+        if (data.statusCode === 200) {
           this.toastrService.success("Student Added Successfully!!")
           this.router.navigate(['/student-list']);
-          }
-        },(err:HttpErrorResponse)=>{
-          if(err.status === 422 && err.error.message==="Phone Number already exists."){
-            this.toastrService.warning("Phone Number is already exists");
-          }
-          if(err.status === 422 && err.error.message==="Email address is already exists."){
-            this.toastrService.warning("Email address is already exists");
-          }
-          if(err.status === 422 && err.error.message==="Invalid Department Id or Course Id or Semester Id" ){
+        }
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422 && err.error.message === "Phone Number already exists.") {
+          this.toastrService.warning("Phone Number is already exists");
+        }
+        if (err.status === 422 && err.error.message === "Email address is already exists.") {
+          this.toastrService.warning("Email address is already exists");
+        }
+        if (err.status === 422 && err.error.message === "Invalid Department Id or Course Id or Semester Id") {
           this.toastrService.error("Please enter all required field");
-          }
-      });  
+        }
+        if (err.status === 422 && err.error.message === "Check  email or phone Pattern") {
+          this.toastrService.error("Check email or phone Pattern");
+        }
+
+      });
   }
 }
 

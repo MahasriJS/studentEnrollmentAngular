@@ -10,8 +10,8 @@ import { StudentService } from 'src/app/services/student.service';
   styleUrls: ['./myprofile.component.css']
 })
 export class MyprofileComponent implements OnInit {
-student: Student;
-reactiveForm: FormGroup;
+  student: Student;
+  reactiveForm: FormGroup;
   constructor(private studentService: StudentService) { }
 
   ngOnInit() {
@@ -31,9 +31,9 @@ reactiveForm: FormGroup;
   }
   getStudentById() {
     // const id: number = Number(this.route.snapshot.params.id);
-    const id= window.localStorage.getItem('id');
-     this.studentService.getStudentById(Number(id)).subscribe((response: any) => {
-     this.student = response.data;
+    const id = window.localStorage.getItem('id');
+    this.studentService.getStudentById(Number(id)).subscribe((response: any) => {
+      this.student = response.data;
     });
-   }
+  }
 }

@@ -1,39 +1,43 @@
 .card {
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    margin-top: 80px;
-  }
-  
-  .card-header{
-    font-weight: bold;
-    background-color: rgb(89, 141, 214);
-  }
-  .card-body{
-    background-color: rgb(3, 26, 59);
-  }
-  
-  .form-group label {
-    font-weight: bold;
-    width: 100px;
-    color: white;
-  }
-  
-  .form-group input {
-    border-radius: 5px;
-  }
-  
-  .btn-primary {
-    margin-top: 20px;
-  }
-
-h3{
-    text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-top: 80px;
 }
+
+.card-header {
+  font-weight: bold;
+  background-color: rgb(89, 141, 214);
+}
+
+.card-body {
+  background-color: rgb(3, 26, 59);
+}
+
+.form-group label {
+  font-weight: bold;
+  width: 100px;
+  color: white;
+}
+
+.form-group input {
+  border-radius: 5px;
+}
+
+.btn-primary {
+  margin-top: 20px;
+}
+
+h3 {
+  text-align: center;
+}
+
 #edit {
   margin-top: 20px;
-  margin-left: 145px;
+  margin-left: 115px;
 }
+
 #reset {
   margin-top: 20px;
-  margin-left: 50px;
+  margin-left: 20px;
+  width: 100px
 }

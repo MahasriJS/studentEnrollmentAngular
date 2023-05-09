@@ -1,50 +1,56 @@
 .required {
-    color: red;
-  }
-h3{
+  color: red;
+}
+
+h3 {
   text-align: center;
 }
-  .card {
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    margin-top: 100px;
-  }
-  
-  .card-header{
-    font-weight: bold;
-    background-color: rgb(89, 141, 214);
-  }
-  .card-body{
-    background-color: rgb(3, 26, 59);
-  }
-  #add {
-    margin-top: 20px;
-    margin-left: 130px;
-  }
-  #reset {
-    margin-top: 20px;
-    margin-left: 50px;
-  }
-  select {
-    width: 100%;
-    height: 34px;
-    font-size: 17px;
-    line-height: 1.42857143;
-    color:black;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .form-group label {
-    font-weight: bold;
-    color: white;
-  }
-  
-  .form-group input {
-    border-radius: 5px;
-  }
-  
-  .btn-primary {
-    margin-top: 20px;
-  }
-  
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-top: 100px;
+}
+
+.card-header {
+  font-weight: bold;
+  background-color: rgb(89, 141, 214);
+}
+
+.card-body {
+  background-color: rgb(3, 26, 59);
+}
+
+#add {
+  margin-top: 20px;
+  margin-left: 130px;
+}
+
+#reset {
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+select {
+  width: 100%;
+  height: 34px;
+  font-size: 17px;
+  line-height: 1.42857143;
+  color: black;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: white;
+}
+
+.form-group input {
+  border-radius: 5px;
+}
+
+.btn-primary {
+  margin-top: 20px;
+}

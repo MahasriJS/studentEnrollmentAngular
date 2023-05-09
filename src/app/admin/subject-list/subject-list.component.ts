@@ -66,16 +66,16 @@ export class SubjectListComponent implements OnInit {
     return this.reactiveForm.controls;
   }
   onSubmit(): void {
-    
+
     const courseId = this.reactiveForm.get('course').value;
     const semId = this.reactiveForm.get('semester').value;
     this.subjectService.getSubjects(Number(courseId), Number(semId)).subscribe((response: any) => {
       this.subjects = response.data;
-      if(response.statusCode===200 && response.message==="Subjets retrieved Successfully!!"){
+      if (response.statusCode === 200 && response.message === "Subjets retrieved Successfully!!") {
         this.showTable = true;
         this.toastrService.success("Subjets retrieved Successfully!!");
       }
-      if(response.statusCode===200 && response.message==="Subjects Not Found"){
+      if (response.statusCode === 200 && response.message === "Subjects Not Found") {
         this.toastrService.warning("No Data Found");
       }
     }, (err: HttpErrorResponse) => {

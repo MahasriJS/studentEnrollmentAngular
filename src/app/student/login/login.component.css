@@ -1,50 +1,58 @@
 .card {
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
-  }
-  
-  .card-header{
-    font-weight: bold;
-    background-color: rgb(3, 26, 59);
-  }
-  .card-body{
-    background-color: rgb(3, 26, 59);
-  }
-  .form-group label {
-    font-weight: bold;
-    color:white ;
-  }
-  
-  .form-group input {
-    border-radius: 5px;
-  }
-  
-  .btn-primary {
-    margin-top: 20px;
-  }
-  .required{
-    color: red;
-  }
-  a{
-    margin-left: 10px;
-  }
-  .container {
-    max-width: 500px;
-  }
-  .text-danger{
-    margin-left: 144px;
-  }
-  h1,h3{
-    color: white;
-    text-align: center;
-  }
- 
-#login{
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-top: 50px;
+}
+
+.card-header {
+  font-weight: bold;
+  background-color: rgb(3, 26, 59);
+}
+
+.card-body {
+  background-color: rgb(3, 26, 59);
+}
+
+.form-group label {
+  font-weight: bold;
+  color: white;
+}
+
+.form-group input {
+  border-radius: 5px;
+}
+
+.btn-primary {
+  margin-top: 20px;
+}
+
+.required {
+  color: red;
+}
+
+a {
+  margin-left: 10px;
+}
+
+.container {
+  max-width: 500px;
+}
+
+.text-danger {
+  margin-left: 144px;
+}
+
+h1,
+h3 {
+  color: white;
+  text-align: center;
+}
+
+#login {
   margin-left: 170px;
   width: 100px;
 }
 
-.admin{
+.admin {
   margin-left: 190px;
 }

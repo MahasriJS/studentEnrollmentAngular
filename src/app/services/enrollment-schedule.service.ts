@@ -10,11 +10,11 @@ export class EnrollmentScheduleService {
 
   baseURL: string = "http://localhost:8080/schedule-enrollment";
   constructor(private http: HttpClient) { }
-  scheduleEnrollment(scheduleEnrollment:EnrollmentSchedule): Observable<any> {
-    const headers = { 'content-type': 'application/json'}  
-    const body=JSON.stringify(scheduleEnrollment);
+  scheduleEnrollment(scheduleEnrollment: EnrollmentSchedule): Observable<any> {
+    const headers = { 'content-type': 'application/json' }
+    const body = JSON.stringify(scheduleEnrollment);
     console.log(body)
-    return this.http.post(this.baseURL , body,{'headers':headers})
+    return this.http.post(this.baseURL, body, { 'headers': headers })
   }
- 
+
 }

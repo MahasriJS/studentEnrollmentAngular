@@ -74,7 +74,7 @@
 </div>
 </div>
 <table class="table"  *ngIf="showTable">
-    <thead>
+    <thead class="text-center">
         <tr>
             <th>SN</th>
             <th>Name</th>
@@ -82,12 +82,12 @@
             <th>Email</th>
             <th>Phone Number</th>
             <th>Address</th>
-            <th>Academic Year</th>
+            <!-- <th>Academic Year</th> -->
             <th colspan="2">Action</th>
             
         </tr>
     </thead>
-    <tbody>
+    <tbody class="text-center">
         <tr *ngFor="let student of students ; let i=index">
             <td>{{ i + 1 }}</td>
             <td>{{ student.name }}</td>
@@ -95,8 +95,8 @@
             <td>{{ student.email }}</td>
             <td>{{ student.phno }}</td>
             <td>{{ student.address }}</td>
-            <td>{{ student.academicYear }}</td>
-            <td><button class="btn btn-success" (click)="edit(student.id)">Edit</button></td>
+            <!-- <td>{{ student.academicYear }}</td> -->
+            <td><button class="btn btn-success" id="edit" (click)="edit(student.id)">Edit</button></td>
            <!--<td><button class="btn btn-danger" (click)="delete()">InActivate</button></td>--> 
             <td><button class="btn btn-danger" (click)="updateAvailability(student)">
                 {{ student.isAvailable ? 'Deactivate' : 'Activate' }}

@@ -17,8 +17,8 @@ export class EditStaffComponent implements OnInit {
 
   reactiveForm: FormGroup;
   staff: Staff;
-  departments:Department[];
-  constructor(private staffService: StaffService, private route: ActivatedRoute,private toastrService: ToastrService)  { }
+  departments: Department[];
+  constructor(private staffService: StaffService, private route: ActivatedRoute, private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.reactiveForm = new FormGroup({
@@ -36,7 +36,7 @@ export class EditStaffComponent implements OnInit {
   getStaffById() {
     const id: number = Number(this.route.snapshot.params.id);
     this.staffService.getStaffById(Number(id)).subscribe((response: any) => {
-    this.staff = response.data;
+      this.staff = response.data;
     });
 
   }
@@ -46,16 +46,16 @@ export class EditStaffComponent implements OnInit {
     this.staffService.upadteStaff(id, staff)
       .subscribe((response: any) => {
         this.staff = response.data;
-        if(response.statusCode === 200){
+        if (response.statusCode === 200) {
           alert("Staff Updated Successfully!!")
-          }
-        },(err:HttpErrorResponse)=>{
-          if(err.status === 422 && err.error.message==="Email is already exists."){
-            alert("Email is already exists.");
-          }
-          if(err.status === 422 && err.error.message==="Phno is already exists."){
-            alert("Phno is already exists.");
-          }
+        }
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422 && err.error.message === "Email is already exists.") {
+          alert("Email is already exists.");
+        }
+        if (err.status === 422 && err.error.message === "Phno is already exists.") {
+          alert("Phno is already exists.");
+        }
       });
   }
 }

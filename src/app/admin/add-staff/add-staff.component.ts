@@ -18,7 +18,7 @@ export class AddStaffComponent implements OnInit {
   reactiveForm: FormGroup;
   departments: Department[];
   constructor(private departmentService: DepartmentService, private staffService: StaffService,
-    private router: Router,private toastrService: ToastrService) { }
+    private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.departmentService.getDepartments()
@@ -34,7 +34,8 @@ export class AddStaffComponent implements OnInit {
       designation: new FormControl(null, Validators.required),
       dob: new FormControl(null, Validators.required),
       dateofjoining: new FormControl(null, Validators.required),
-      salary: new FormControl(null, Validators.required)
+      salary: new FormControl(null, Validators.required),
+
     });
   }
   get reactiveFormControl() {
@@ -54,7 +55,8 @@ export class AddStaffComponent implements OnInit {
       password: "temp",
       deptId: this.reactiveForm.get('department').value,
       salary: this.reactiveForm.value.salary,
-      designation: this.reactiveForm.value.designation
+      designation: this.reactiveForm.value.designation,
+      type: "Staff",
     };
     console.log(staff);
     this.staffService.addStaff(staff)
@@ -68,10 +70,14 @@ export class AddStaffComponent implements OnInit {
         if (err.status === 422 && err.error.message === "Phone Number already exists.") {
           this.toastrService.warning("Phone Number is already exists");
         }
+
         if (err.status === 422 && err.error.message === "Email address is already exists.") {
           this.toastrService.warning("Email address is already exists");
         }
-        if (err.status === 422 && err.error.message==="Invalid Department Id or User Type Id") {
+        if (err.status === 422 && err.error.message === "Check  email or phone Pattern") {
+          this.toastrService.error("Check email or phone Pattern");
+        }
+        if (err.status === 422 && err.error.message === "Invalid Department Id or User Type Id") {
           this.toastrService.error("Please Enter all required filed");
         }
       });

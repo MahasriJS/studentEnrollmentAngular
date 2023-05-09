@@ -31,20 +31,18 @@ export class StudentListComponent implements OnInit {
   semesters: Semester[];
   courseTypes: CourseType[];
   showTable = false;
-  academicYears:string[];
-  // isAlert:boolean=false;
-  // message:string;
+  academicYears: string[];
   constructor(private departmentService: DepartmentService,
     private courseTypeService: CoursetypeService,
     private courseService: CourseService,
     private semesterService: SemesterService,
-    private studentService: StudentService, private router: Router, private toastrService:ToastrService) { }
+    private studentService: StudentService, private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.studentService.getAcademicYear()
-    .subscribe((response: any) => {
-      this.academicYears = response.data;
-    });
+      .subscribe((response: any) => {
+        this.academicYears = response.data;
+      });
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
@@ -58,7 +56,7 @@ export class StudentListComponent implements OnInit {
       courseType: new FormControl(null, Validators.required),
       course: new FormControl(null, Validators.required),
       semester: new FormControl(null, Validators.required),
-      academicYear: new FormControl(null,Validators.required)
+      academicYear: new FormControl(null, Validators.required)
     });
 
   }
@@ -78,22 +76,22 @@ export class StudentListComponent implements OnInit {
     return this.reactiveForm.controls;
   }
   onSubmit(): void {
-   
+
     const deptId = this.reactiveForm.get('department').value;
     const courseId = this.reactiveForm.get('course').value;
-    const academicYear=this.reactiveForm.get('academicYear').value;
+    const academicYear = this.reactiveForm.get('academicYear').value;
     this.studentService.getStudents(Number(deptId), Number(courseId), academicYear).subscribe((response: any) => {
-    this.students = response.data;
-  
-      if (response.statusCode === 200){
+      this.students = response.data;
+
+      if (response.statusCode === 200 && response.message === "Students retrieved Successfully!!") {
         this.showTable = true;
         this.toastrService.success("Student Display Successfully");
       }
-      if (response.statusCode === 200 && response.message==="Students Not Found") {
+      if (response.statusCode === 200 && response.message === "Students Not Found") {
         this.toastrService.warning("No Data Found")
       }
     }, (err: HttpErrorResponse) => {
-      if (err.status === 422 && err.error.message==="Invalid Department Id or Course Id or Semester Id") {
+      if (err.status === 422 && err.error.message === "Invalid Department Id or Course Id or Semester Id") {
         this.toastrService.error("Please enter the required values");
         // window.location.reload();
       }
@@ -103,7 +101,7 @@ export class StudentListComponent implements OnInit {
   edit(id: number): void {
     this.router.navigate(['/student', id, 'edit']);
   }
-  upgrade(student:Student){
+  upgrade(student: Student) {
     this.router.navigate(['/upgrade']);
   }
 

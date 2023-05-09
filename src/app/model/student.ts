@@ -19,4 +19,5 @@ export class Student {
     department?:Department;
     course?:Course;
     semester?:Semester;
+    type?:string;
     }

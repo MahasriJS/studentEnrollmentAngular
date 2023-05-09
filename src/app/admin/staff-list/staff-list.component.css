@@ -8,10 +8,12 @@
   font-weight: bold;
   background-color: rgb(89, 141, 214);
 }
-.card-body{
- 
+
+.card-body {
+
   background-color: rgb(3, 26, 59);
 }
+
 .form-group label {
   font-weight: bold;
   color: #fff;
@@ -22,24 +24,27 @@
 }
 
 select {
-    width: 100%;
-    height: 34px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .container {
-    margin-top: 20px;
-    margin: 1px;
-    width: 300px;
-  }
-  .table{
-    background-color:black;
-    color: white;
-  }
-  .btn-primary {
-   margin-left: 200px;
-  }
+  width: 100%;
+  height: 34px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.container {
+  margin-top: 20px;
+  margin: 1px;
+  width: 300px;
+}
+
+.table {
+  background-color: black;
+  color: white;
+}
+
+.btn-primary {
+  margin-left: 200px;
+}

@@ -1,5 +1,4 @@
 import { Department } from "./department";
-//import { UserType } from "./user-type";
 
 export class Staff {
     name: string;
@@ -12,7 +11,7 @@ export class Staff {
     academicYear:string;
     password:string;
     department?:Department;
-    //type:string;
+    type?:string;
     designation:string;
     salary:number;
     id?: number;

@@ -8,5 +8,4 @@ export class Subject {
     courseId:Course;
     semesterId:Semester;
     id?:number;
-    //disabled?:boolean;
 }

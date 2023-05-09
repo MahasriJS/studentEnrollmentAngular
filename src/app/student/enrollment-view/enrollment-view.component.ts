@@ -27,7 +27,7 @@ export class EnrollmentViewComponent implements OnInit {
   semesters: Semester[];
   courseTypes: CourseType[];
   showTable = false;
-  student : Student;
+  student: Student;
   constructor(private departmentService: DepartmentService,
     private courseTypeService: CoursetypeService,
     private courseService: CourseService,
@@ -37,28 +37,28 @@ export class EnrollmentViewComponent implements OnInit {
     private studentService: StudentService) { }
 
   ngOnInit() {
-  //   this.departmentService.getDepartments()
-  //   .subscribe((response: any) => {
-  //     this.departments = response.data;
-  //   });
-  this.courseTypeService.getCourseTypes()
-    .subscribe((response: any) => {
-      this.courseTypes = response.data;
+    //   this.departmentService.getDepartments()
+    //   .subscribe((response: any) => {
+    //     this.departments = response.data;
+    //   });
+    this.courseTypeService.getCourseTypes()
+      .subscribe((response: any) => {
+        this.courseTypes = response.data;
+      });
+    this.reactiveForm = new FormGroup({
+      name: new FormControl(null, Validators.required),
+      department: new FormControl(null, Validators.required),
+      courseType: new FormControl(null, Validators.required),
+      course: new FormControl(null, Validators.required),
+      semester: new FormControl(null, Validators.required)
     });
-  this.reactiveForm = new FormGroup({
-    name: new FormControl(null, Validators.required),
-    department: new FormControl(null, Validators.required),
-    courseType: new FormControl(null, Validators.required),
-    course: new FormControl(null, Validators.required),
-    semester: new FormControl(null, Validators.required)
-  });
-  this.getStudentById();
+    this.getStudentById();
   }
   getStudentById() {
-  
-   const id= window.localStorage.getItem('id');
+
+    const id = window.localStorage.getItem('id');
     this.studentService.getStudentById(Number(id)).subscribe((response: any) => {
-    this.student = response.data;
+      this.student = response.data;
     });
   }
 
@@ -71,10 +71,10 @@ export class EnrollmentViewComponent implements OnInit {
   onSubmit(): void {
     this.showTable = true;
     const semId = this.reactiveForm.get('semester').value;
-    
-    const studentId= window.localStorage.getItem('id');
-    this.enrollmentService.getEnrollmentDetailsByStudent(Number(semId),Number(studentId)).subscribe((response: any) => {
-    this.enrollments = response.data;
+
+    const studentId = window.localStorage.getItem('id');
+    this.enrollmentService.getEnrollmentDetailsByStudent(Number(semId), Number(studentId)).subscribe((response: any) => {
+      this.enrollments = response.data;
     });
   }
 }
