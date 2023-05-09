@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-header">
+              <h3>List Staff</h3>
+            </div>
+            <div class="card-body">
+    <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+    <div class="container">
+        <label for="department">Select Department:</label>
+        <select id="department" formControlName="department">
+            <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
+        </select>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.department.touched) && reactiveFormControl.department.errors?.required">
+       Department is required
+    </span> 
+    </div>
+    <br><br>
+    <button type="submit" class="btn btn-primary">View Staff</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+<table class="table"  *ngIf="showTable">
+    <thead>
+        <tr>
+            <th>SN</th>
+            <th>Name</th>
+            <th>Dob</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Salary</th>
+            <th>Designation</th>
+            <th></th>
+            <th colspan="2">Action</th>   
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let staff of staffs; let i=index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ staff.name }}</td>
+            <td>{{ staff.dob }}</td>
+            <td>{{ staff.email }}</td>
+            <td>{{ staff.phno }}</td>
+            <td>{{ staff.address }}</td>
+            <td>{{ staff.salary }}</td>
+            <td>{{ staff.designation }}</td>
+            <td><button class="btn btn-success" (click)="edit(staff.id)">Edit</button></td>
+            <td><button class="btn btn-danger" (click)="updateAvailability(staff)">
+                {{ staff.isAvailable ? 'Deactivate' : 'Activate' }}
+            </button></td>            
+        </tr>
+    </tbody>
+</table>
+

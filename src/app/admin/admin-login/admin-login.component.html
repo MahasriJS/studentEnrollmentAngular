@@ -1,0 +1,34 @@
+<h1>Student Enrollment</h1>
+<div class="container">
+        <div class="card">
+          <div class="card-header">
+            <h3>Login</h3>
+          </div>
+          <div class="card-body">
+      <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <div class="row">
+        <label class="col-md-4" for="email">Username:<span class="required">*</span></label>
+        <input class="col-md-6" type="email" id="email" name="email" formControlName="email" placeholder="Enter your Email" required>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.email.touched) && reactiveFormControl.email.errors?.required">
+        Email is required
+        </span>  
+      </div>
+      </div>
+  
+      <div class="form-group">
+        <div class="row">
+        <label class="col-md-4" for="password">Password:<span class="required">*</span></label>
+        <input class="col-md-6" type="password" id="password" name="password" formControlName="password" placeholder="Enter your Password" required>
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.password.touched) && reactiveFormControl.password.errors?.required">
+        Password is required
+        </span> 
+      </div> 
+      </div>
+      <button type="submit" class="btn btn-primary" id="login" [disabled]="!reactiveForm.valid">Login</button>
+    </form>
+  </div>
+</div>
+</div>

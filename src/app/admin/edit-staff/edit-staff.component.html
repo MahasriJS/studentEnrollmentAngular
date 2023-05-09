@@ -1,0 +1,69 @@
+<app-navbar></app-navbar>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-header">
+              <h3>Edit Staff</h3>
+            </div>
+            <div class="card-body">
+<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <div clas="row">
+    <label class="col-md-4"for="name">Name:</label>
+    <input class="col-md-5"id="name" type="text" formControlName="name" placeholder="Enter your name" required [(ngModel)]="staff.name">
+    </div>
+  </div>
+    <div class="form-group">
+      <div clas="row">
+    <label class="col-md-4" for="dob">Date of Birth:</label>
+    <input class="col-md-5" id="dob" type="date" formControlName="dob" placeholder="Select date of birth" required [(ngModel)]="staff.dob">
+    </div>
+  </div>
+    <div class="form-group">
+      <div clas="row">
+    <label class="col-md-4" for="email">Email:</label>
+    <input class="col-md-5" type="email" id="email" name="email" formControlName="email" placeholder="Enter your Email" required [(ngModel)]="staff.email">
+    </div>
+  </div>
+    <div class="form-group">
+      <div clas="row">
+    <label class="col-md-4" for="phno">Phone:</label>
+    <input class="col-md-5" type="text" id="phno" name="phno" formControlName="phno" placeholder="Enter your Phone Number" required [(ngModel)]="staff.phno">
+   </div>
+  </div>
+    <div class="form-group">
+      <div clas="row">
+    <label class="col-md-4" for="address">Address:</label>
+    <textarea class="col-md-5" id="address" formControlName="address" placeholder="Enter your Address" required [(ngModel)]="staff.address"></textarea>
+    </div>
+  </div>
+    <div class="form-group">
+      <div clas="row">
+        <label class="col-md-4" for="dateOfJoining">Date of Joining:</label>
+        <input class="col-md-5" id="dateOfJoining" type="date" formControlName="dateOfJoining" placeholder="Enter your Date Of Joining" required [(ngModel)]="staff.dateOfJoining">
+        </div>
+        </div>
+    <div class="form-group">
+      <div clas="row">
+    <label class="col-md-4" for="salary">Salary:</label>
+    <input class="col-md-5" id="salary" type="text" formControlName="salary" placeholder="Enter your salary" required [(ngModel)]="staff.salary">
+    </div>
+    </div>
+    <div class="form-group">
+      <div clas="row">
+        <label class="col-md-4" for="designation">Designation:</label>
+        <input iclass="col-md-5" d="designation" type="text" formControlName="designation" placeholder="Enter your designation" required [(ngModel)]="staff.designation">
+        </div>
+        </div>
+
+    <button type="submit" class="btn btn-primary" id="edit">Edit Staff</button>
+    &nbsp;
+    
+    <button type="reset" class="btn btn-primary" id="reset">Reset</button>   
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>

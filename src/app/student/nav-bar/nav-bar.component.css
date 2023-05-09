@@ -1,0 +1,11 @@
+.navbar a:hover {
+  background-color: rgb(146, 148, 146);
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}

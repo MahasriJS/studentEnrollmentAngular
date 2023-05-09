@@ -1,0 +1,58 @@
+.card {
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-top: 100px;
+}
+
+.card-header {
+  font-weight: bold;
+  background-color: rgb(89, 141, 214);
+}
+
+.card-body {
+  background-color: rgb(3, 26, 59);
+}
+
+h3 {
+  text-align: center;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #fff;
+}
+
+.form-group input {
+  border-radius: 5px;
+}
+
+select {
+  width: 100%;
+  height: 34px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.container {
+  margin-top: 20px;
+  margin: 1px;
+  width: 300px;
+}
+
+.table {
+  background-color: black;
+  color: white;
+}
+
+#view {
+  margin-left: 210px;
+  width: 150px;
+}
+
+.required {
+  color: red;
+}
