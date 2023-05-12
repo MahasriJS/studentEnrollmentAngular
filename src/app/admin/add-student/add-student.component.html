@@ -7,7 +7,7 @@
                     <h3>Add Student</h3>
                 </div>
                 <div class="card-body">
-                    <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+                    <form [formGroup]="reactiveForm" (ngSubmit)="addStudent()">
                         <div class="form-group">
                             <label for="name">Name: <span class="required">*</span></label>
                             <input id="name" type="text" formControlName="name" placeholder="Enter your name" required>
@@ -33,14 +33,22 @@
                                 *ngIf="(reactiveFormControl.email.touched) && reactiveFormControl.email.errors?.required">
                                 Email is required
                             </span>
+                            <span class="danger"
+                                *ngIf="(reactiveFormControl.email.touched) && reactiveFormControl.email.errors?.email">
+                                Email is Invaild
+                            </span>
                         </div>
                         <div class="form-group">
-                            <label for="phno">Phone: <span class="required">*</span></label>
-                            <input type="tel" id="phno" name="phno" formControlName="phno"
+                            <label for="phno">Phone:<span class="required">*</span></label>
+                            <input type="text" id="phno" name="phno" formControlName="phno"
                                 placeholder="Enter your Phone Number" required>
                             <span class="danger"
                                 *ngIf="(reactiveFormControl.phno.touched) && reactiveFormControl.phno.errors?.required">
                                 Phone Number is required
+                            </span>
+                            <span class="danger"
+                                *ngIf="(reactiveFormControl.phno.touched) && reactiveFormControl.phno.errors?.pattern">
+                                Please, Enter 10 digit Mobile Number.
                             </span>
                         </div>
                         <div class="form-group">
@@ -61,19 +69,15 @@
                                 Date of Joining is required
                             </span>
                         </div>
+
                         <div class="form">
-                            <label for="academicyear">Academic year: <span class="required">*</span></label>
-                            <select class="form-select academic-year" aria-label="Academic Year"
-                                formControlName="academicyear" placeholder="Select academicYear" required>
-                                <option disabled selected>Select Academic Year</option>
-                                <option value="2023-2027">2023-2027</option>
-                                <option value="2022-2026">2022-2026</option>
-                                <option value="2021-2025">2021-2025</option>
-                                <option value="2020-2024">2020-2024</option>
-                                <option value="2019-2023">2019-2023</option>
+                            <label for="academicYear">Select Academic Year:</label>
+                            <select id="academicYear" formControlName="academicYear">
+                                <option value="">Select Academic Year</option>
+                                <option *ngFor="let academicYear of academicYears">{{academicYear}}</option>
                             </select>
                             <span class="text-danger"
-                                *ngIf="(reactiveFormControl.academicyear.touched) && reactiveFormControl.academicyear.errors?.required">
+                                *ngIf="(reactiveFormControl.academicYear.touched) && reactiveFormControl.academicYear.errors?.required">
                                 Academic Year is required
                             </span>
                         </div>
@@ -82,7 +86,7 @@
                             <label for="department">Select Department: <span class="required">*</span></label>
                             <select id="department" formControlName="department" placeholder="Select your Department"
                                 required>
-                                <option disabled selected>Select Department</option>
+                                <option value="">Select Department</option>
                                 <option *ngFor="let department of departments" [value]="department.id">
                                     {{department.name}}</option>
                             </select>
@@ -133,7 +137,8 @@
                             </span>
                         </div>
 
-                        <button type="submit" class="btn btn-primary" id="add">Add Student</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid" id="add">Add
+                            Student</button>
                         &nbsp;
                         <button type="reset" class="btn btn-primary" id="reset">Reset</button>
                     </form>

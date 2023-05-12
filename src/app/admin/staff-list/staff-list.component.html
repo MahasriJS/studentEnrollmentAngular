@@ -2,31 +2,38 @@
 <div class="form-group">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-          <div class="card">
-            <div class="card-header">
-              <h3>List Staff</h3>
+            <div class="card">
+                <div class="card-header">
+                    <h3>List Staff</h3>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="reactiveForm" (ngSubmit)="listStaff()">
+                        <div class="container">
+                            <label for="department">Select Department:</label>
+                            <select id="department" formControlName="department">
+                                <option>Select Department</option>
+                                <option *ngFor="let department of departments" [value]="department.id">
+                                    {{department.name}}</option>
+                            </select>
+                            <span class="text-danger"
+                                *ngIf="(reactiveFormControl.department.touched) && reactiveFormControl.department.errors?.required">
+                                Department is required
+                            </span>
+                        </div>
+                        <br><br>
+                        <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid">View
+                            Staff</button>
+                            &nbsp;
+                            <button type="reset" class="btn btn-primary" id="reset">Reset</button>
+                            &nbsp;
+                            <button type="reset" class="btn btn-primary" id="reset">Reset</button>
+                    </form>
+                </div>
             </div>
-            <div class="card-body">
-    <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
-    <div class="container">
-        <label for="department">Select Department:</label>
-        <select id="department" formControlName="department">
-            <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
-        </select>
-        <span class="text-danger"
-        *ngIf="(reactiveFormControl.department.touched) && reactiveFormControl.department.errors?.required">
-       Department is required
-    </span> 
+        </div>
     </div>
-    <br><br>
-    <button type="submit" class="btn btn-primary">View Staff</button>
-</form>
 </div>
-</div>
-</div>
-</div>
-</div>
-<table class="table"  *ngIf="showTable">
+<table class="table" *ngIf="showTable">
     <thead>
         <tr>
             <th>SN</th>
@@ -38,7 +45,7 @@
             <th>Salary</th>
             <th>Designation</th>
             <th></th>
-            <th colspan="2">Action</th>   
+            <th colspan="2">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -53,9 +60,8 @@
             <td>{{ staff.designation }}</td>
             <td><button class="btn btn-success" (click)="edit(staff.id)">Edit</button></td>
             <td><button class="btn btn-danger" (click)="updateAvailability(staff)">
-                {{ staff.isAvailable ? 'Deactivate' : 'Activate' }}
-            </button></td>            
+                    {{ staff.isAvailable ? 'Deactivate' : 'Activate' }}
+                </button></td>
         </tr>
     </tbody>
 </table>
-

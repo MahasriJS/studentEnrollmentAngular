@@ -35,65 +35,76 @@ export class StudentListComponent implements OnInit {
   constructor(private departmentService: DepartmentService,
     private courseTypeService: CoursetypeService,
     private courseService: CourseService,
-    private semesterService: SemesterService,
     private studentService: StudentService, private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.studentService.getAcademicYear()
       .subscribe((response: any) => {
         this.academicYears = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Academic Years Not Found");
+        }
       });
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Departments Not Found");
+        }
       });
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("CourseTypes Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       department: new FormControl(null, Validators.required),
       courseType: new FormControl(null, Validators.required),
       course: new FormControl(null, Validators.required),
-      semester: new FormControl(null, Validators.required),
       academicYear: new FormControl(null, Validators.required)
     });
 
   }
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
-    this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
+    this.courseService.getCourses(deptId, courseTypeId).subscribe((response: any) => {
       this.courses = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Courses Not Found");
+
+      }
     });
 
   }
 
-  // getSemestersByCourseType(courseTypeId: number): void {
-  //   this.semesterService.getSemesters(Number(courseTypeId)).subscribe((response: any) => {
-  //     this.semesters = response.data;
-  //   });
-  // }
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
+  listStudent(): void {
 
-    const deptId = this.reactiveForm.get('department').value;
-    const courseId = this.reactiveForm.get('course').value;
-    const academicYear = this.reactiveForm.get('academicYear').value;
-    this.studentService.getStudents(Number(deptId), Number(courseId), academicYear).subscribe((response: any) => {
+    const deptId: number = Number(this.reactiveForm.get('department').value);
+    const courseId: number = Number(this.reactiveForm.get('course').value);
+    const academicYear: string = this.reactiveForm.get('academicYear').value;
+    this.studentService.getStudents(deptId, courseId, academicYear).subscribe((response: any) => {
       this.students = response.data;
 
       if (response.statusCode === 200 && response.message === "Students retrieved Successfully!!") {
         this.showTable = true;
-        this.toastrService.success("Student Display Successfully");
+        this.toastrService.success("Students Retrieved Successfully");
       }
       if (response.statusCode === 200 && response.message === "Students Not Found") {
-        this.toastrService.warning("No Data Found")
+        this.showTable = false;
+        this.toastrService.warning("No Students Found")
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 422 && err.error.message === "Invalid Department Id or Course Id or Semester Id") {
         this.toastrService.error("Please enter the required values");
-        // window.location.reload();
+
       }
     });
   }
@@ -105,41 +116,17 @@ export class StudentListComponent implements OnInit {
     this.router.navigate(['/upgrade']);
   }
 
-  // upgrade(student:Student){
-  //   const courseTypeId = this.reactiveForm.get('courseType').value;
-  //   const semId = this.reactiveForm.get('semester').value;
-  //   if(courseTypeId==1 && semId<8 || courseTypeId==2 && semId<12){
-  //   this.studentService.upgrade(Number(student.id)).subscribe((response: any) => {
-  //     this.student = response.data;
-  //     if (response.statusCode === 200) {
-  //     alert("Student Upgrade Successfully!!");
-  //     // this.isAlert=true;
-  //     // this.message="Student Upgrade Successfully!!"
-  //     }
-  //   const index:number = this.students.indexOf(student);
-  //   if (index >= 0) {
-  //     this.students.splice(index, 1);
-  //   }
-  //   }, (err: HttpErrorResponse) => {
-  //     if (err.status === 422) {
-  //       alert("Unable to upgrade student"); 
-  //     }
-  //   });
-  // }
-  // else{
-  //   alert("Unable to upgrade student");
-  // }
-  // }
   updateAvailability(student: Student) {
     const isAvailable = !student.isAvailable;
     this.studentService.updateStudentAvailability(Number(student.id), isAvailable).subscribe((response: any) => {
       this.student = response.data;
       if (response.statusCode === 200) {
         student.isAvailable = isAvailable;
+        this.toastrService.success("Student Status Updated Successfully!!");
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 422) {
-        alert("Please enter the required values");
+        alert("Invaild");
         window.location.reload();
       }
     });

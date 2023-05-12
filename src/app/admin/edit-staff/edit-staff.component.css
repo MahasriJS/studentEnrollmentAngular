@@ -29,11 +29,14 @@ h3 {
 .btn-primary {
   margin-top: 20px;
 }
-
+.danger {
+  margin-left: 173px;
+  color: red;
+}
 #edit {
   margin-top: 20px;
   margin-left: 130px;
-  width: 100px;
+  width: 130px;
 }
 
 #reset {

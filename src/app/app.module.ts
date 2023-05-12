@@ -12,7 +12,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { StudentListComponent } from './admin/student-list/student-list.component';
 import { EditStudentComponent } from './admin/edit-student/edit-student.component';
 import { AddSubjectComponent } from './admin/add-subject/add-subject.component';
-
 import { AddStaffComponent } from './admin/add-staff/add-staff.component';
 import { StaffListComponent } from './admin/staff-list/staff-list.component';
 import { EditStaffComponent } from './admin/edit-staff/edit-staff.component';
@@ -32,32 +31,32 @@ import { EditProfileComponent } from './student/edit-profile/edit-profile.compon
 import { UpgradeComponent } from './admin/upgrade/upgrade.component';
 import { ToastrModule } from 'ngx-toastr';
 import { EnrollmentScheduleComponent } from './admin/enrollment-schedule/enrollment-schedule.component';
-
+import { UrlUtils } from './utils/url-utils';
 
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: "Login", pathMatch: "full" },
-  { path: "Login", component: LoginComponent },
-  { path: 'add-student', component: AddStudentComponent },
-  { path: 'student-list', component: StudentListComponent },
+  { path: '', redirectTo: "student/login", pathMatch: "full" },
+  { path: 'student/login', component: LoginComponent },
+  { path: 'student/add', component: AddStudentComponent },
+  { path: 'student/list', component: StudentListComponent },
   { path: 'student/:id/edit', component: EditStudentComponent },
-  { path:'add-subject', component:AddSubjectComponent},
-  { path:'add-staff',component:AddStaffComponent },
-  { path: 'staff-list', component:StaffListComponent},
+  { path:'subject/add', component:AddSubjectComponent},
+  { path:'staff/add',component:AddStaffComponent },
+  { path: 'staff/list', component:StaffListComponent},
   { path: 'staff/:id/edit', component: EditStaffComponent },
-  { path: 'subject-list',component:SubjectListComponent},
-  { path:'staff-assign', component:StaffAssignComponent},
-  { path: 'staff-assign-list',component:StaffAssignListComponent},
-  { path: 'enrollment-admin-list', component:EnrollmentListComponent},
-  { path:'enrollment-student-list', component:EnrollmentViewComponent},
-  { path: 'change-password/:id', component:ChangePasswordComponent},
-  { path:'enrollment', component:EnrollmentComponent},
+  { path: 'subject/list',component:SubjectListComponent},
+  { path:'staff/assign', component:StaffAssignComponent},
+  { path: 'staff/assign/list',component:StaffAssignListComponent},
+  { path: 'enrollment/list/admin', component:EnrollmentListComponent},
+  { path:'enrollment/list/student', component:EnrollmentViewComponent},
+  { path: 'student/change-password', component:ChangePasswordComponent},
+  { path:'student/enrollment', component:EnrollmentComponent},
   { path:'home', component:HomeComponent},
-  { path:'admin-login', component:AdminLoginComponent},
+  { path:'admin/login', component:AdminLoginComponent},
   { path:'my-profile', component:MyprofileComponent},
   { path:'edit-profile',component:EditProfileComponent},
-  { path:'upgrade', component: UpgradeComponent},
-  { path:'enrollment-schedule', component:EnrollmentScheduleComponent},
+  { path:'student/upgrade', component: UpgradeComponent},
+  { path:'enrollment/schedule', component:EnrollmentScheduleComponent},
   { path: "**", component: LoginComponent }
 ];
 
@@ -86,7 +85,7 @@ const appRoutes: Routes = [
    MyprofileComponent,
    EditProfileComponent,
    UpgradeComponent,
-   EnrollmentScheduleComponent
+   EnrollmentScheduleComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,7 +101,7 @@ const appRoutes: Routes = [
     }),
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [UrlUtils],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

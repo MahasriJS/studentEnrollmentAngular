@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Student } from 'src/app/model/student';
 import { StudentService } from 'src/app/services/student.service';
 
@@ -12,7 +13,7 @@ import { StudentService } from 'src/app/services/student.service';
 export class MyprofileComponent implements OnInit {
   student: Student;
   reactiveForm: FormGroup;
-  constructor(private studentService: StudentService) { }
+  constructor(private studentService: StudentService, private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.reactiveForm = new FormGroup({
@@ -30,10 +31,13 @@ export class MyprofileComponent implements OnInit {
     this.getStudentById();
   }
   getStudentById() {
-    // const id: number = Number(this.route.snapshot.params.id);
-    const id = window.localStorage.getItem('id');
-    this.studentService.getStudentById(Number(id)).subscribe((response: any) => {
+    const id = Number(window.localStorage.getItem('studentId'));
+    this.studentService.getStudentById(id).subscribe((response: any) => {
       this.student = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Student Not Found");
+      }
     });
   }
 }

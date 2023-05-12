@@ -2,9 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Enrollment } from 'src/app/model/enrollment';
-import { Enrollments } from 'src/app/model/enrollments';
-import { Enrolls } from 'src/app/model/enrolls';
+import { EnrollmentDto } from 'src/app/model/enrollmentDto';
+import { Enroll } from 'src/app/model/enroll';
 import { FilterValues } from 'src/app/model/filter-values';
 import { Staff } from 'src/app/model/staff';
 import { Student } from 'src/app/model/student';
@@ -29,8 +30,8 @@ export class EnrollmentComponent implements OnInit {
   subjectMap: Map<number, Subject>;
   staffMap: Map<number, Staff>;
   selectedSubjects: string[] = [];
-  enrolls: Enrolls[] = [];
-  finalEnrollments: Enrollments[] = [];
+  enrolls: Enroll[] = [];
+  finalEnrollments: EnrollmentDto[] = [];
 
   showTable: boolean = false;
   subject: Subject;
@@ -42,7 +43,7 @@ export class EnrollmentComponent implements OnInit {
   constructor(private studentService: StudentService, private route: ActivatedRoute,
     private subjectService: SubjectService, private staffService: StaffService,
     private enrollmentService: EnrollmentService, private formBuilder: FormBuilder,
-    private router: Router) { }
+    private router: Router, private toastrService: ToastrService) { }
   ngOnInit() {
     this.reactiveForm = new FormGroup({
       name: new FormControl(null, Validators.required),
@@ -53,31 +54,39 @@ export class EnrollmentComponent implements OnInit {
       subject: new FormControl(null, Validators.required),
       staff: new FormControl(null, Validators.required)
     });
-    this.getCheckSchedule(Number(window.localStorage.getItem('id')));
+    this.checkSchedule(Number(window.localStorage.getItem('studentId')));
     this.getStudentById();
   }
 
-  getCheckSchedule(studentId: number) {
+  checkSchedule(studentId: number) {
     this.studentService.checkSchedule(Number(studentId)).subscribe((response: any) => {
       this.isCheck = response.data;
-    });
-  }
-  getStudentById() {
-    const id = window.localStorage.getItem('id');
-    this.studentService.getStudentById(Number(id)).subscribe((response: any) => {
-      this.student = response.data;
-      if (this.student != null) {
-        this.getSubjectByCourseAndSemester();
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Enrollment Schedule Not Found");
       }
     });
   }
-  getSubjectByCourseAndSemester(): void {
-    const courseId = this.student.course.id;
-    const semId = this.student.semester.id;
-    this.subjectService.getSubjects(Number(courseId), Number(semId)).subscribe((response: any) => {
+  getStudentById() {
+    const id: number = Number(window.localStorage.getItem('studentId'));
+    this.studentService.getStudentById(id).subscribe((response: any) => {
+      this.student = response.data;
+      if (this.student != null) {
+        this.getSubjectsByCourseAndSemester();
+      }
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Student Not Found");
+      }
+    });
+  }
+  getSubjectsByCourseAndSemester(): void {
+    this.subjectService.getSubjects(this.student.course.id, this.student.semester.id).subscribe((response: any) => {
       this.subjects = response.data;
-      // this.getStaffsBySubject();
-      //  this.isDisabled = true;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Subjects Not Found");
+      }
       this.subjectMap = new Map<number, Subject>();
       this.subjects.forEach(subject => {
         this.subjectMap.set(subject.id, subject);
@@ -85,10 +94,14 @@ export class EnrollmentComponent implements OnInit {
     });
   }
 
-  getStaffsBySubject(): void {
-    const subjectId = this.reactiveForm.get('subject').value;
-    this.staffService.getAssignedStaff(Number(subjectId)).subscribe((response: any) => {
+  getStaffsBySubjectId(): void {
+    const subjectId: number = Number(this.reactiveForm.get('subject').value);
+    this.staffService.getAssignedStaffBySubjectId(subjectId).subscribe((response: any) => {
       this.staffs = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Staff Not Found");
+      }
       this.staffMap = new Map<number, Staff>();
       this.staffs.forEach(staff => {
         this.staffMap.set(staff.id, staff)
@@ -98,20 +111,14 @@ export class EnrollmentComponent implements OnInit {
 
   addStaff(): void {
     this.showTable = true;
-    const subjectId = this.reactiveForm.get('subject').value;
-    const studentId = window.localStorage.getItem('id');
-    const semId = this.student.semester.id;
-    const staffId = this.reactiveForm.get('staff').value;
-    const courseId = this.student.course.id;
-    const deptId = this.student.department.id;
-    this.enrollmentService.getEnrollmentAvailability(Number(subjectId), Number(studentId),
-      staffId, Number(semId), Number(deptId), Number(courseId)).subscribe((response: any) => {
-        console.log(response.data)
+    const subjectId: number = Number(this.reactiveForm.get('subject').value);
+    const studentId: number = Number(window.localStorage.getItem('studentId'));
+    const staffId: number = Number(this.reactiveForm.get('staff').value);
+    this.enrollmentService.getEnrollmentAvailability(subjectId, studentId,
+      staffId, this.student.semester.id, this.student.department.id, this.student.course.id).subscribe((response: any) => {
         this.enrollments = response.data;
         let subject: Subject = this.subjectMap.get(Number(subjectId));
-        console.log(this.staffMap);
         let staff: Staff = this.staffMap.get(Number(staffId));
-        const studentId = window.localStorage.getItem('id');
         let filterValue = new FilterValues();
         filterValue.staffName = staff.name;
         filterValue.subjectName = subject.name;
@@ -139,42 +146,41 @@ export class EnrollmentComponent implements OnInit {
 
       }, (err: HttpErrorResponse) => {
         if (err.status === 422 && err.error.message === "Student is already enrolled in this subject") {
-          alert("You have already enrolled");
+          this.toastrService.error("You have already enrolled");
         }
         if (err.status === 422 && err.error.data === false) {
-          alert("Enrollment is full for this staff");
-        }
-        if (err.status === 422) {
-          alert("Please enter the required values");
+          this.toastrService.error("Enrollment is Not available for this staff");
         }
       });
   }
 
-  onSubmit(): void {
+  saveEnrollment(): void {
     if (this.enrolls.length >= 5) {
       for (let i = 0; i < this.enrolls.length; i++) {
-        let enroll: Enrolls = this.enrolls[i];
-        const values = { subjectId: enroll.subjectId, studentId: enroll.studentId, staffId: enroll.staffId };
-        this.finalEnrollments.push(values);
+        let enroll: Enroll = this.enrolls[i];
+        let filterValue = new FilterValues();
+        filterValue.subjectId = enroll.subjectId;
+        filterValue.studentId = enroll.studentId;
+        filterValue.staffId = enroll.staffId;
+        this.finalEnrollments.push(filterValue);
       }
-      this.enrollmentService.getEnrollment(this.finalEnrollments).subscribe((response: any) => {
+      this.enrollmentService.saveEnrollment(this.finalEnrollments).subscribe((response: any) => {
         this.enrollments = response.data;
         if (response.statusCode === 200) {
-          // this.enrollment(this.student.id);
-          alert("Enrollment Successful !!!")
+          this.toastrService.success("Enrollment Successful !!!")
           this.router.navigate(['/enrollment-student-list']);
         }
       }, (err: HttpErrorResponse) => {
         if (err.status === 422 && err.error.message === "Student is already enrolled in this subject") {
-          alert("You have already enrolled");
+          this.toastrService.error("You have already enrolled");
         }
         if (err.status === 422 && err.error.message === "Invalid Student Id or Subject Id or Staff Id") {
-          alert("Invalid Student Id or Subject Id or Staff Id");
+          this.toastrService.error("Invalid Student Id or Subject Id or Staff Id");
         }
       });
     }
     else {
-      alert("Select all the subjects");
+      this.toastrService.error("Select all the subjects");
     }
   }
 }

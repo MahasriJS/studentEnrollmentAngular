@@ -1,48 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Enrollment } from '../model/enrollment';
-import { Enrollments } from '../model/enrollments';
+import { UrlUtils } from '../utils/url-utils';
+import { EnrollmentDto } from '../model/enrollmentDto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnrollmentService {
 
-  private adminUrl = "http://localhost:8080/enrollment/admin/view";
-  constructor(private http: HttpClient) { }
-
-  getEnrollmentDetailsByAdmin(department: number, course: number, semester: number, staff: number, subject: number, academicYear: string): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    const object = { deptId: department, courseId: course, semId: semester, staffId: staff, subjectId: subject, academicYear: academicYear }
-    const body = JSON.stringify(object);
-    console.log(body)
-    return this.http.post(this.adminUrl, body, { 'headers': headers })
+  constructor(private http: HttpClient, private urlUtils: UrlUtils) { }
+  private adminViewUrl = this.urlUtils.getBaseUrl() + "/enrollments/view/admin";
+  getEnrollmentDetailsByAdmin(departmentId: number, courseId: number, semesterId: number, staffId: number, subjectId: number, academicYear: string): Observable<any> {
+    const body = { deptId: departmentId, courseId: courseId, semId: semesterId, staffId: staffId, subjectId: subjectId, academicYear: academicYear }
+    return this.http.post(this.adminViewUrl, body)
   }
-  private studentUrl = "http://localhost:8080/enrollment/student/view";
-  getEnrollmentDetailsByStudent(semester: number, studentId: number): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    const object = { semId: semester, studentId: studentId }
-    const body = JSON.stringify(object);
-    console.log(body)
-    return this.http.post(this.studentUrl, body, { 'headers': headers })
+  private studentViewUrl = this.urlUtils.getBaseUrl() + "/enrollments/view/student";
+  getEnrollmentDetailsByStudent(semesterId: number, studentId: number): Observable<any> {
+    const body = { semId: semesterId, studentId: studentId }
+    return this.http.post(this.studentViewUrl, body)
   }
-  private availabilityUrl = "http://localhost:8080/enrollment/available";
+  private availabilityUrl = this.urlUtils.getBaseUrl() + "/enrollments/available";
   getEnrollmentAvailability(subjectId: number, studentId: number, staffId: number, semId: number, deptId: number, courseId: number): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    const object = { subjectId: subjectId, semId: semId, studentId: studentId, staffId: staffId, deptId: deptId, courseId: courseId }
-    const body = JSON.stringify(object);
-    console.log(body)
-    return this.http.post(this.availabilityUrl, body, { 'headers': headers })
+    const body = { subjectId: subjectId, semId: semId, studentId: studentId, staffId: staffId, deptId: deptId, courseId: courseId }
+    return this.http.post(this.availabilityUrl, body)
   }
-  private enrollmentUrl = "http://localhost:8080/enrollment/";
-  getEnrollment(finalEnrollments: Enrollments[]): Observable<any[]> {
-    const headers = { 'content-type': 'application/json' }
-    //const object = { subjectId:subjectId,studentId:studentId,staffId:staffId}
-    // const object={finalEnrollments:finalEnrollments}
-    // const body = JSON.stringify(obj);
-    // console.log(body)
-    return this.http.post<any[]>(this.enrollmentUrl, finalEnrollments, { 'headers': headers })
+
+  private enrollmentUrl = this.urlUtils.getBaseUrl() + "/enrollments";
+  saveEnrollment(finalEnrollments: EnrollmentDto[]): Observable<any[]> {
+    return this.http.post<any[]>(this.enrollmentUrl, finalEnrollments)
   }
 }
 

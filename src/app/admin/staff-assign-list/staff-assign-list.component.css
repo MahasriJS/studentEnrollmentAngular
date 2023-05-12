@@ -46,11 +46,20 @@ select {
   margin-left: 200px;
 }
 
-.table {
-  background-color: black;
-  color: white;
+th,
+td {
+  border: 1px solid white;
+}
+thead {
+  color: wheat;
 }
 
+.table {
+  border-collapse: collapse;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
 .required {
   color: red;
 }

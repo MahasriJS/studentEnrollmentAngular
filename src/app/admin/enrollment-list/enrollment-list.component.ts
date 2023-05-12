@@ -52,14 +52,26 @@ export class EnrollmentListComponent implements OnInit {
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Departments Not Found");
+        }
       });
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("CourseTypes Not Found");
+        }
       });
     this.studentService.getAcademicYear()
       .subscribe((response: any) => {
         this.academicYears = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Academic Years Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       department: new FormControl(null, Validators.required),
@@ -72,45 +84,63 @@ export class EnrollmentListComponent implements OnInit {
     });
   }
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
-    this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
+    this.courseService.getCourses(deptId, courseTypeId).subscribe((response: any) => {
       this.courses = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Courses Not Found");
+      }
     });
 
   }
 
   getSemestersByCourseType(courseTypeId: number): void {
-    this.semesterService.getSemesters(Number(courseTypeId)).subscribe((response: any) => {
+    this.semesterService.getSemesters(courseTypeId).subscribe((response: any) => {
       this.semesters = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Semesters Not Found");
+      }
     });
   }
   getSubjectByCourseAndSemester(courseId: number, semId: number): void {
-    this.subjectService.getSubjects(Number(courseId), Number(semId)).subscribe((response: any) => {
+    this.subjectService.getSubjects(courseId, semId).subscribe((response: any) => {
       this.subjects = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Subjects Not Found");
+      }
     });
   }
-  getStaffsByDepartment(deptId: number) {
-    this.staffService.getStaffs(Number(deptId)).subscribe((response: any) => {
+
+  getAssignedStaffsBySubjectId(){
+    const subjectId:number=Number(this.reactiveForm.get('subject').value);
+    this.staffService.getAssignedStaffBySubjectId(subjectId).subscribe((response: any) => {
       this.staffs = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Staffs Not Found");
+      }
     });
   }
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
-    const deptId = this.reactiveForm.get('department').value;
-    const courseId = this.reactiveForm.get('course').value;
-    const semId = this.reactiveForm.get('semester').value;
-    const subjectId = this.reactiveForm.get('subject').value;
-    const staffId = this.reactiveForm.get('staff').value;
-    const academicYear = this.reactiveForm.get('academicYear').value;
-    this.enrollmentService.getEnrollmentDetailsByAdmin(Number(deptId), Number(courseId), Number(semId), Number(subjectId), Number(staffId), academicYear).subscribe((response: any) => {
+  viewEnrollment(): void {
+    const deptId:number = Number(this.reactiveForm.get('department').value);
+    const courseId:number = Number(this.reactiveForm.get('course').value);
+    const semId:number= Number(this.reactiveForm.get('semester').value);
+    const subjectId:number = Number(this.reactiveForm.get('subject').value);
+    const staffId:number =Number(this.reactiveForm.get('staff').value);
+    const academicYear:string = this.reactiveForm.get('academicYear').value;
+    this.enrollmentService.getEnrollmentDetailsByAdmin(deptId, courseId, semId, subjectId, staffId, academicYear).subscribe((response: any) => {
       this.enrollments = response.data;
-      if (response.statusCode === 200 && response.message === "Enrollment retrieved Successfully!!") {
+      if (response.statusCode === 200 && response.message === "Enrollment details are retrieved Successfully!!") {
         this.showTable = true;
-        this.toastrService.success("Enrollment retrieved Successfully!!");
+        this.toastrService.success("Enrollment details are retrieved Successfully!!");
       }
       if (response.statusCode === 200 && response.message === "Enrollments Not Found") {
-        this.toastrService.warning("No Data Found");
+        this.toastrService.warning("Enrollments Not Found");
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 422) {

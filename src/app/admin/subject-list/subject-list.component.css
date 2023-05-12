@@ -42,11 +42,21 @@ select {
   width: 300px;
 }
 
+th,
+td {
+  border: 1px solid white;
+}
+thead {
+  color: wheat;
+}
+
 .table {
+  border-collapse: collapse;
   background-color: black;
   color: white;
+  border: 1px solid white;
 }
 
 #view {
-  margin-left: 220px;
+  margin-left: 150px;
 }

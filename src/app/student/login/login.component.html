@@ -5,7 +5,7 @@
             <h3>Login</h3>
           </div>
           <div class="card-body">
-      <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="reactiveForm" (ngSubmit)="login()">
       <div class="form-group">
         <div class="row">
         <label class="col-md-4" for="email">Username:<span class="required">*</span></label>
@@ -14,6 +14,10 @@
         *ngIf="(reactiveFormControl.email.touched) && reactiveFormControl.email.errors?.required">
         Email is required
         </span>  
+        <span class="text-danger"
+        *ngIf="(reactiveFormControl.email.touched) && reactiveFormControl.email.errors?.email">
+          Email is Invaild
+          </span>
       </div>
       </div>
   
@@ -27,9 +31,9 @@
         </span>
       </div>  
       </div>
-      <button type="submit" class="btn btn-primary" id="login">Login</button>  
+      <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid" id="login">Login</button>  
       <br>
-      <a href="/admin-login" class="admin">admin?</a>
+      <a href="/admin/login" class="admin">admin?</a>
     </form>
   </div>
 </div>

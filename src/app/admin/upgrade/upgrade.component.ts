@@ -27,7 +27,8 @@ export class UpgradeComponent implements OnInit {
   semesters: Semester[];
   courseTypes: CourseType[];
   academicYears: string[];
-
+  courseTypeMap: Map<number, CourseType>;
+  semesterMap: Map<number, Semester>;
 
   constructor(private departmentService: DepartmentService,
     private courseTypeService: CoursetypeService,
@@ -39,14 +40,30 @@ export class UpgradeComponent implements OnInit {
     this.studentService.getAcademicYear()
       .subscribe((response: any) => {
         this.academicYears = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Academic Years Not Found");
+        }
       });
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Deparments Not Found");
+        }
       });
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
+        this.courseTypeMap = new Map<number,CourseType>();
+        this.courseTypes.forEach(courseType => {
+        this.courseTypeMap.set(courseType.id, courseType);
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("CourseTypes Not Found");
+        }
+      });
       });
     this.reactiveForm = new FormGroup({
       department: new FormControl(null, Validators.required),
@@ -57,39 +74,51 @@ export class UpgradeComponent implements OnInit {
     });
   }
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
-    this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
+    this.courseService.getCourses(deptId, courseTypeId).subscribe((response: any) => {
       this.courses = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Courses Not Found");
+      }
     });
 
   }
 
   getSemestersByCourseType(courseTypeId: number): void {
-    this.semesterService.getSemesters(Number(courseTypeId)).subscribe((response: any) => {
+    this.semesterService.getSemesters(courseTypeId).subscribe((response: any) => {
       this.semesters = response.data;
+      this.semesterMap = new Map<number,Semester>();
+      this.semesters.forEach(semester => {
+      this.semesterMap.set(semester.id, semester);
+    });
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Semesters Not Found");
+       
+      }
     });
   }
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
-    const academicYear = this.reactiveForm.get('academicYear').value;
-    const deptId = this.reactiveForm.get('department').value;
-    const courseTypeId = this.reactiveForm.get('courseType').value;
-    const courseId = this.reactiveForm.get('course').value;
-    const semId = this.reactiveForm.get('semester').value;
-    if (courseTypeId == 1 && semId < 8 || courseTypeId == 2 && semId < 12) {
+  upgradeStudent(): void {
+    const academicYear: string = this.reactiveForm.get('academicYear').value;
+    const deptId:number = Number(this.reactiveForm.get('department').value);
+    const courseTypeId:number = Number(this.reactiveForm.get('courseType').value);
+    const courseId:number = Number(this.reactiveForm.get('course').value);
+    const semId:number = Number(this.reactiveForm.get('semester').value);
+    let courseType: CourseType= this.courseTypeMap.get(courseTypeId);
+    let semester: Semester= this.semesterMap.get(semId);
+    if (courseType.courseTypeName == "UG" && semester.order < 8 || courseType.courseTypeName == "PG" && semester.order< 4) {
       this.studentService.upgrade(academicYear, Number(deptId), Number(courseId), Number(semId)).subscribe((response: any) => {
-        //this.student = response.data;
         if (response.data === true) {
-          alert("Upgrade Successfully!!");
+          this.toastrService.success("Upgrade Successfully!!");
         }
         if (response.data === false) {
-          this.toastrService.error("Unable to Upgrade");
+          this.toastrService.error("Not All the students are Enrolled");
         }
       });
     }
-    // else{
-    //   this.toastrService.error("Unable to Upgrade");
-    // }
+  
   }
 }

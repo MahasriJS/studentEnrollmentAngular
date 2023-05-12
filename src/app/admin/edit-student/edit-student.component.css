@@ -23,10 +23,14 @@ h3 {
   font-weight: bold;
 }
 
-.form-group input {
+.form-group input,textarea {
   border-radius: 5px;
+  width: 250px;
 }
-
+.danger {
+  margin-left: 100px;
+  color: red;
+}
 .form label {
   font-weight: bold;
   color: white;
@@ -45,7 +49,7 @@ select {
 #edit {
   margin-top: 20px;
   margin-left: 130px;
-  width: 120px;
+  width: 130px;
 }
 
 #reset {

@@ -24,13 +24,17 @@ export class AddStaffComponent implements OnInit {
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Department Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
       department: new FormControl(null, Validators.required),
       email: new FormControl(null, Validators.email),
-      phno: new FormControl(null, Validators.required),
+      phno: new FormControl(null,  Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")),
       designation: new FormControl(null, Validators.required),
       dob: new FormControl(null, Validators.required),
       dateofjoining: new FormControl(null, Validators.required),
@@ -41,8 +45,7 @@ export class AddStaffComponent implements OnInit {
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
-    console.log(this.reactiveForm);
+  addStaff(): void {
     const staff: Staff = {
       name: this.reactiveForm.value.name,
       email: this.reactiveForm.value.email,
@@ -52,18 +55,16 @@ export class AddStaffComponent implements OnInit {
       dateOfJoining: this.reactiveForm.value.dateofjoining,
       isAvailable: true,
       academicYear: this.reactiveForm.value.academicyear,
-      password: "temp",
       deptId: this.reactiveForm.get('department').value,
       salary: this.reactiveForm.value.salary,
       designation: this.reactiveForm.value.designation,
       type: "Staff",
     };
-    console.log(staff);
     this.staffService.addStaff(staff)
       .subscribe((response: any) => {
-        console.log(response);
         if (response.statusCode === 200) {
-          this.router.navigate(['/student-list']);
+          this.toastrService.success("Staff Added Successfully!!")
+          this.router.navigate(['/staff/list']);
         }
 
       }, (err: HttpErrorResponse) => {
@@ -74,11 +75,14 @@ export class AddStaffComponent implements OnInit {
         if (err.status === 422 && err.error.message === "Email address is already exists.") {
           this.toastrService.warning("Email address is already exists");
         }
-        if (err.status === 422 && err.error.message === "Check  email or phone Pattern") {
-          this.toastrService.error("Check email or phone Pattern");
+        if (err.status === 422 && err.error.message === "Invaild phoneNumber") {
+          this.toastrService.warning("Invaild phoneNumber");
+        }
+        if (err.status === 422 && err.error.message === "Invaild email") {
+          this.toastrService.warning("Invaild email");
         }
         if (err.status === 422 && err.error.message === "Invalid Department Id or User Type Id") {
-          this.toastrService.error("Please Enter all required filed");
+          this.toastrService.error("Invalid Department Id or User Type Id");
         }
       });
   }

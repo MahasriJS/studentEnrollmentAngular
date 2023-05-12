@@ -7,7 +7,7 @@
               <h3>Add Subject</h3>
             </div>
             <div class="card-body">
-<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="reactiveForm" (ngSubmit)="addSubject()">
     <div class="form-group">
         <div class="row">
     <label class="col-md-4" for="name">Name:<span class="required">*</span></label>
@@ -31,7 +31,7 @@
    <div class="form-group">
     <div class="row">
     <label class="col-md-4" for="credits">Credits:<span class="required">*</span></label>
-    <input class="col-md-6" type="number" id="credits" name="credits" formControlName="credits" placeholder="Enter the subject credits" required>
+    <input class="col-md-6" type="number" id="credits" name="credits" min="1" max="4" formControlName="credits" placeholder="Enter the subject credits" required>
     <span class="text-danger"
     *ngIf="(reactiveFormControl.credits.touched) && reactiveFormControl.credits.errors?.required">
     Credits is required
@@ -92,7 +92,7 @@
         </span> 
     </div>
   
-    <button type="submit" class="btn btn-primary" id="add">Add Subject</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!reactiveForm.valid" id="add">Add Subject</button>
     &nbsp;
     <button type="reset" class="btn btn-primary" id="reset">Reset</button>   
 </form>

@@ -11,7 +11,10 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
   declarations: [
     EnrollmentListComponent, 
     EnrollmentViewComponent, 
-    EnrollmentComponent, NavBarComponent, MyprofileComponent, EditProfileComponent],
+    EnrollmentComponent, 
+    NavBarComponent, 
+    MyprofileComponent, 
+    EditProfileComponent],
   imports: [
     CommonModule
   ]

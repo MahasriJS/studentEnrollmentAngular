@@ -41,10 +41,18 @@ export class StaffAssignListComponent implements OnInit {
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Departments Not Found");
+        }
       });
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("CourseTypes Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       department: new FormControl(null, Validators.required),
@@ -55,40 +63,50 @@ export class StaffAssignListComponent implements OnInit {
     });
   }
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
-    this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
+    this.courseService.getCourses(deptId, courseTypeId).subscribe((response: any) => {
       this.courses = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Courses Not Found");
+      }
     });
 
   }
 
   getSemestersByCourseType(courseTypeId: number): void {
-    this.semesterService.getSemesters(Number(courseTypeId)).subscribe((response: any) => {
+    this.semesterService.getSemesters(courseTypeId).subscribe((response: any) => {
       this.semesters = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Semesters Not Found");
+      }
     });
   }
   getSubjectByCourseAndSemester(courseId: number, semId: number): void {
-    this.subjectService.getSubjects(Number(courseId), Number(semId)).subscribe((response: any) => {
+    this.subjectService.getSubjects(courseId, semId).subscribe((response: any) => {
       this.subjects = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Subjects Not Found");
+      }
     });
   }
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
-
-    const subjectId = this.reactiveForm.get('subject').value;
-    this.staffService.getAssignedStaff(Number(subjectId)).subscribe((response: any) => {
+  assignStaffList(): void {
+    const subjectId:number = Number(this.reactiveForm.get('subject').value);
+    this.staffService.getAssignedStaffBySubjectId(subjectId).subscribe((response: any) => {
       this.staffs = response.data;
       if (response.statusCode === 200) {
         this.showTable = true;
-        // this.toastrService.success("Staff retrieved Sucessfully!!")
       }
       if (response.statusCode === 200 && response.message === "Staffs Not Found") {
         this.toastrService.warning("No Data Found")
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 422) {
-        alert("Please enter the required values");
+        this.toastrService.error("Invalid Staff");
       }
     });
   }

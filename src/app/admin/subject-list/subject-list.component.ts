@@ -37,10 +37,18 @@ export class SubjectListComponent implements OnInit {
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Departments Not Found");
+        }
       });
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Course Types Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       department: new FormControl(null, Validators.required),
@@ -51,8 +59,13 @@ export class SubjectListComponent implements OnInit {
 
   }
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
-    this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
+    this.courseService.getCourses(deptId, courseTypeId).subscribe((response: any) => {
       this.courses = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Courses Not Found");
+
+      }
     });
 
   }
@@ -60,27 +73,31 @@ export class SubjectListComponent implements OnInit {
   getSemestersByCourseType(courseTypeId: number): void {
     this.semesterService.getSemesters(Number(courseTypeId)).subscribe((response: any) => {
       this.semesters = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Semesters Not Found");
+
+      }
     });
   }
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
-
-    const courseId = this.reactiveForm.get('course').value;
-    const semId = this.reactiveForm.get('semester').value;
-    this.subjectService.getSubjects(Number(courseId), Number(semId)).subscribe((response: any) => {
+  listSubject(): void {
+    const courseId: number = Number(this.reactiveForm.get('course').value);
+    const semId: number = Number(this.reactiveForm.get('semester').value);
+    this.subjectService.getSubjects(courseId, semId).subscribe((response: any) => {
       this.subjects = response.data;
       if (response.statusCode === 200 && response.message === "Subjets retrieved Successfully!!") {
         this.showTable = true;
         this.toastrService.success("Subjets retrieved Successfully!!");
       }
       if (response.statusCode === 200 && response.message === "Subjects Not Found") {
-        this.toastrService.warning("No Data Found");
+        this.toastrService.warning("Subjects are not included in this semester");
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 422) {
-        this.toastrService.error("Please enter the required values");
+        this.toastrService.error("Invalid Semester Id");
       }
     });
   }

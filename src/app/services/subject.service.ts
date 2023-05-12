@@ -2,25 +2,23 @@ import { Injectable } from '@angular/core';
 import { Subject } from '../model/subject';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { UrlUtils } from '../utils/url-utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubjectService {
-  baseURL: string = "http://localhost:8080/subject";
-  constructor(private http: HttpClient) { }
+
+  
+  constructor(private http: HttpClient,private urlUtils: UrlUtils) { }
+
+  private url=  this.urlUtils.getBaseUrl() +"/subjects"
   addSubject(subject: Subject): Observable<any> {
-    const headers = { 'content-type': 'application/json' }
-    const body = JSON.stringify(subject);
-    console.log(body)
-    return this.http.post(this.baseURL, body, { 'headers': headers })
+    return this.http.post(this.url, subject)
   }
-  getUrl: string = "http://localhost:8080/subjects";
+  
   getSubjects(courseId: number, semesterId: number): Observable<Subject[]> {
-    const headers = { 'content-type': 'application/json' }
-    const object = { courseId: courseId, semId: semesterId }
-    const body = JSON.stringify(object);
-    console.log(body)
-    return this.http.post<Subject[]>(this.getUrl, body, { 'headers': headers })
+    const body = { courseId: courseId, semId: semesterId }
+    return this.http.post<Subject[]>(this.url+"/ids", body)
   }
 }

@@ -31,12 +31,6 @@ export class AddSubjectComponent implements OnInit {
   constructor(private departmentService: DepartmentService, private subjectService: SubjectService,
     private courseTypeService: CoursetypeService, private courseService: CourseService, private fb: FormBuilder,
     private semesterService: SemesterService, private router: Router, private toastrService: ToastrService) {
-    // this.reactiveForm = this.fb.group({
-    //   deptId: [''],
-    //   courseType: [''],
-    //   courseId: [''],
-    //   semId: ['']
-    // });
   }
 
 
@@ -44,15 +38,23 @@ export class AddSubjectComponent implements OnInit {
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Department Not Found");
+        }
       });
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("CourseType Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       code: new FormControl(null, Validators.required),
-      credits: new FormControl(0, Validators.required),
+      credits: new FormControl(1, Validators.required),
       department: new FormControl(null, Validators.required),
       courseType: new FormControl(null, Validators.required),
       course: new FormControl(null, Validators.required),
@@ -66,17 +68,24 @@ export class AddSubjectComponent implements OnInit {
   getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
     this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
       this.courses = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Course Not Found");
+      }
     });
   }
 
   getSemestersByCourseType(courseTypeId: number): void {
     this.semesterService.getSemesters(Number(courseTypeId)).subscribe((response: any) => {
       this.semesters = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Semester Not Found");
+      }
     });
   }
 
-  onSubmit(): void {
-    console.log(this.reactiveForm);
+  addSubject(): void {
     const subject: Subject = {
       name: this.reactiveForm.value.name,
       code: this.reactiveForm.value.code,
@@ -84,13 +93,12 @@ export class AddSubjectComponent implements OnInit {
       semesterId: this.reactiveForm.get('semester').value,
       credits: this.reactiveForm.value.credits
     };
-    console.log(subject);
+  
     this.subjectService.addSubject(subject)
       .subscribe(data => {
-        console.log(data);
         if (data.statusCode === 200) {
           this.toastrService.success("Subject Added Successfully!!")
-          this.router.navigate(['/subject-list']);
+          this.router.navigate(['/subject/list']);
         }
       }, (err: HttpErrorResponse) => {
         if (err.status === 422 && err.error.message === "Unable to add subject") {
@@ -100,7 +108,7 @@ export class AddSubjectComponent implements OnInit {
           this.toastrService.warning("Subject Code is already exists.");
         }
         if (err.status === 422 && err.error.message === "Invalid Course Id or Semester Id") {
-          this.toastrService.error("Please Enter all Required filed");
+          this.toastrService.error("Invalid Course Id or Semester Id");
         }
 
       });

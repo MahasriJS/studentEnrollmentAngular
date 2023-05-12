@@ -9,11 +9,11 @@ export class Staff {
     email:string;
     isAvailable:boolean;
     academicYear:string;
-    password:string;
+    password?:string;
     department?:Department;
     type?:string;
     designation:string;
     salary:number;
     id?: number;
-    deptId?:Department;
+    deptId?:number;
 }

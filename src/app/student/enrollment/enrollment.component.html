@@ -1,119 +1,95 @@
 <app-nav-bar></app-nav-bar>
 <div class="container" *ngIf="isCheck;else enrollNotAvailable">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Enrollment</h3>
-                </div>
-                <div class="card-body">
-                    <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
-                        <div class="form-group">
-                
-                            <label class="col-md-4"for="name">Name:<span class="required">*</span></label>
-                            <input class="col-md-6" id="name" type="text" formControlName="name" placeholder="Enter your name" required
-                                [(ngModel)]="student.name" disabled>
-                        
-                    </div>
-                        <div class="form-group">
-                            <label class="col-md-4" for="department">Department:<span class="required">*</span></label>
-                            <input class="col-md-6" id="department" type="text" formControlName="department"
-                                placeholder="Enter your department" required [(ngModel)]="student.department.name" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4" for="course">Course:<span class="required">*</span></label>
-                            <input class="col-md-6" id="course" type="text" formControlName="course" placeholder="Enter your course"
-                                required [(ngModel)]="student.course.name" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4" for="semester">Semester:<span class="required">*</span></label>
-                            <input class="col-md-6" id="semester" type="text" formControlName="semester" (change)="getSubjectByCourseAndSemester(reactiveForm.get('course').value, $event.target.value)"
-                                placeholder="Enter your semester" required [(ngModel)]="student.semester.name" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4" for="subject">Select Subject:<span class="required">*</span></label>
-                            <select class="col-md-6" name="subject" id="subject" formControlName="subject"  required  (change)="getStaffsBySubject(reactiveForm.get('subject').value)"> 
-                                <option *ngFor="let subject of subjects" [value]="subject.id"[disabled]="selectedValue === subject.id">{{subject.name}}</option>
-                            </select>
-                                <!-- <div *ngIf="allChecked">
-                                    <option #allSelected (click)="toggleAllSelection()" [value]="0">All</option>
-                                  </div> -->
-                                  <!-- <div *ngIf="!areAllValuesSelected()">
-                                    <span style="color: red;">Please select all options.</span>
-                                  </div> -->           
-                            
-                            
-                        </div>
-                        <!-- <div *ngIf="isSubjectSelected(reactivetForm.get('subject').value)">Subject selected already.</div> -->
-                        <div class="form-group">
-                            <label class="col-md-4" for="staff">Select Staff:<span class="required">*</span></label>
-                            <select class="col-md-6" id="staff" formControlName="staff" required>
-                                <option>Select Staff</option>
-                                <option  *ngFor="let staff of staffs" [value]="staff.id">{{staff.name}}</option>
-                            </select> &nbsp;
-                            <button type="button" (click)="addStaff()" class="btn btn-primary">Add Staff</button>
-                            <table class="table"  *ngIf="showTable">
-                                <thead>
-                                    <tr>
-                                        <th>Subject Name</th>
-                                        <th>Subject Code</th>
-                                        <th>Staff Name</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let enrollment of enrolls">
-                                        <td>{{ enrollment.subjectName }}</td>
-                                        <td>{{ enrollment.subjectCode }}</td>
-                                        <td>{{ enrollment.staffName }}</td>
-                                        
-                                    </tr>
-                                
-                                </tbody>
-                            </table>
-                            
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="enroll">Enroll</button>
-                        &nbsp;
-                        
-                        <button type="reset" class="btn btn-primary" id="reset">Reset</button>
-                    </form>
-                </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-header">
+          <h3>Enrollment</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="reactiveForm" (ngSubmit)="saveEnrollment()">
+            <div class="form-group">
+
+              <label class="col-md-4" for="name">Name:<span class="required">*</span></label>
+              <input class="col-md-6" id="name" type="text" formControlName="name" placeholder="Enter your name"
+                required [(ngModel)]="student.name" disabled>
+
             </div>
-        </div>
-    </div>
-</div>
-<!-- <div *ngIf="!isCheck" class="schedule">
-    Your Enrollment is Not Scheduled
-</div> -->
-<ng-template #enrollNotAvailable>
-<div>
-<!-- <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="warningModalLabel">Warning!</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>This action cannot be undone. Are you sure you want to proceed?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-6 mx-auto">
-        <div class="warning-message">
-          <p><i class="fa fa-exclamation-triangle"></i>Warning!</p><p> Enrollment Not Available.</p>
+            <div class="form-group">
+              <label class="col-md-4" for="department">Department:<span class="required">*</span></label>
+              <input class="col-md-6" id="department" type="text" formControlName="department"
+                placeholder="Enter your department" required [(ngModel)]="student.department.name" disabled>
+            </div>
+            <div class="form-group">
+              <label class="col-md-4" for="course">Course:<span class="required">*</span></label>
+              <input class="col-md-6" id="course" type="text" formControlName="course" placeholder="Enter your course"
+                required [(ngModel)]="student.course.name" disabled>
+            </div>
+            <div class="form-group">
+              <label class="col-md-4" for="semester">Semester:<span class="required">*</span></label>
+              <input class="col-md-6" id="semester" type="text" formControlName="semester"
+                (change)="getSubjectsByCourseAndSemester(reactiveForm.get('course').value, $event.target.value)"
+                placeholder="Enter your semester" required [(ngModel)]="student.semester.name" disabled>
+            </div>
+            <div class="form-group">
+              <label class="col-md-4" for="subject">Select Subject:<span class="required">*</span></label>
+              <select class="col-md-6" name="subject" id="subject" formControlName="subject" required
+                (change)="getStaffsBySubjectId(reactiveForm.get('subject').value)">
+                <option *ngFor="let subject of subjects" [value]="subject.id" [disabled]="selectedValue === subject.id">
+                  {{subject.name}}</option>
+              </select>
+
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4" for="staff">Select Staff:<span class="required">*</span></label>
+              <select class="col-md-6" id="staff" formControlName="staff" required>
+                <option>Select Staff</option>
+                <option *ngFor="let staff of staffs" [value]="staff.id">{{staff.name}}</option>
+              </select> &nbsp;
+              <button type="button" (click)="addStaff()" class="btn btn-primary">Add Staff</button>
+              <table class="table" *ngIf="showTable">
+                <thead>
+                  <tr>
+                    <th>Subject Name</th>
+                    <th>Subject Code</th>
+                    <th>Staff Name</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let enrollment of enrolls">
+                    <td>{{ enrollment.subjectName }}</td>
+                    <td>{{ enrollment.subjectCode }}</td>
+                    <td>{{ enrollment.staffName }}</td>
+
+                  </tr>
+
+                </tbody>
+              </table>
+
+            </div>
+            <button type="submit" class="btn btn-primary" id="enroll">Enroll</button>
+            &nbsp;
+
+            <button type="reset" class="btn btn-primary" id="reset">Reset</button>
+          </form>
         </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #enrollNotAvailable>
+  <div>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="warning-message">
+            <p><i class="fa fa-exclamation-triangle"></i>Warning!</p>
+            <p> Enrollment Not Available.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ng-template>

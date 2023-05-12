@@ -2,76 +2,88 @@
 <div class="form-group">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-          <div class="card">
-            <div class="card-header">
-              <h3>My Profile</h3>
+            <div class="card">
+                <div class="card-header">
+                    <h3>My Profile</h3>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="name">Name:</label>
+                                <input class="col col-md-6" id="name" type="text" formControlName="name"
+                                    placeholder="Enter your name" required [(ngModel)]="student.name" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="dob">Date of Birth:</label>
+                                <input class="col col-md-6" id="dob" type="date" formControlName="dob"
+                                    placeholder="Select date of birth" required [(ngModel)]="student.dob" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="email">Email:</label>
+                                <input class="col col-md-6" type="email" id="email" name="email" formControlName="email"
+                                    placeholder="Enter your Email" required [(ngModel)]="student.email" disabled>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="phno">Phone:</label>
+                                <input class="col col-md-6" type="text" id="phno" name="phno" formControlName="phno"
+                                    placeholder="Enter your Phone Number" required [(ngModel)]="student.phno" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="address">Address:</label>
+                                <input class="col col-md-6" type="text" id="address" formControlName="address"
+                                    placeholder="Enter your Address" required [(ngModel)]="student.address" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="academicYear">Aacademic Year:</label>
+                                <input class="col col-md-6" type="text" id="academicYear" formControlName="academicYear"
+                                    placeholder="Enter your academicYear" required [(ngModel)]="student.academicYear"
+                                    disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="dateOfJoining">Date of Joining:</label>
+                                <input class="col col-md-6" id="dateOfJoining" type="date"
+                                    formControlName="dateOfJoining" placeholder="Enter your Date Of Joining" required
+                                    [(ngModel)]="student.dateOfJoining" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="department">Department:</label>
+                                <input class="col col-md-6" id="department" type="text" formControlName="department"
+                                    required [(ngModel)]="student.department.name" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="course">Course:</label>
+                                <input class="col col-md-6" id="course" type="text" formControlName="course" required
+                                    [(ngModel)]="student.course.name" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col col-md-4" for="semester">Semester:</label>
+                                <input class="col col-md-6" id="semester" type="text" formControlName="semester"
+                                    required [(ngModel)]="student.semester.name" disabled>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-body">
-<form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <div class="row">
-        <label class="col col-md-4"for="name">Name:</label>
-        <input class="col col-md-6" id="name" type="text" formControlName="name" placeholder="Enter your name" required
-            [(ngModel)]="student.name" disabled>
-    </div>
-</div>
-    <div class="form-group">
-        <div class="row">
-        <label class="col col-md-4" for="dob">Date of Birth:</label>
-        <input class="col col-md-6" id="dob" type="date" formControlName="dob" placeholder="Select date of birth" required [(ngModel)]="student.dob"  disabled>
         </div>
     </div>
-        <div class="form-group">
-            <div class="row">
-        <label class="col col-md-4" for="email">Email:</label>
-        <input class="col col-md-6" type="email" id="email" name="email" formControlName="email" placeholder="Enter your Email" required [(ngModel)]="student.email"  disabled>
-        </div>
-    </div>
-        <div class="form-group">
-            <div class="row">
-        <label class="col col-md-4" for="phno">Phone:</label>
-        <input  class="col col-md-6" type="text" id="phno" name="phno" formControlName="phno" placeholder="Enter your Phone Number" required [(ngModel)]="student.phno"  disabled>
-       </div>
-       </div>
-        <div class="form-group">
-            <div class="row">
-        <label class="col col-md-4" for="address">Address:</label>
-        <input  class="col col-md-6" type="text" id="address" formControlName="address" placeholder="Enter your Address" required [(ngModel)]="student.address"  disabled>
-        </div>
-    </div>
-        <div class="form-group">
-            <div class="row">
-            <label class="col col-md-4" for="academicYear">Aacademic Year:</label>
-            <input class="col col-md-6" type="text" id="academicYear" formControlName="academicYear" placeholder="Enter your academicYear" required [(ngModel)]="student.academicYear"  disabled>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-        <label class="col col-md-4" for="dateOfJoining">Date of Joining:</label>
-        <input class="col col-md-6" id="dateOfJoining" type="date" formControlName="dateOfJoining" placeholder="Enter your Date Of Joining" required [(ngModel)]="student.dateOfJoining"  disabled>
-        </div>
-    </div>
-        <div class="form-group">
-            <div class="row">
-            <label class="col col-md-4" for="department">Department:</label>
-            <input class="col col-md-6" id="department" type="text" formControlName="department"  required [(ngModel)]="student.department.name"  disabled>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-            <label class="col col-md-4" for="course">Course:</label>
-            <input class="col col-md-6" id="course" type="text" formControlName="course"  required [(ngModel)]="student.course.name"  disabled>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <label class="col col-md-4" for="semester">Semester:</label>
-                <input  class="col col-md-6" id="semester" type="text" formControlName="semester"  required [(ngModel)]="student.semester.name"  disabled>
-        </div>
-    </div>
-</form>
-</div>
-</div>
-</div>
-</div>
 </div>

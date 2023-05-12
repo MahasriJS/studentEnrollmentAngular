@@ -1,7 +1,7 @@
-import { Enrolls } from './enrolls';
+import { Enroll } from './enroll';
 
 describe('Enrolls', () => {
   it('should create an instance', () => {
-    expect(new Enrolls()).toBeTruthy();
+    expect(new Enroll()).toBeTruthy();
   });
 });

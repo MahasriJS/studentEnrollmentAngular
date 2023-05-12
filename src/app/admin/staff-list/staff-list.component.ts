@@ -27,6 +27,10 @@ export class StaffListComponent implements OnInit {
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Departments Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       department: new FormControl(null, Validators.required)
@@ -35,16 +39,18 @@ export class StaffListComponent implements OnInit {
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
-    const deptId = this.reactiveForm.get('department').value;
-    this.staffService.getStaffs(Number(deptId)).subscribe((response: any) => {
+  listStaff(): void {
+    const deptId:number[] =[];
+    deptId.push(Number(this.reactiveForm.get('department').value));
+    this.staffService.getStaffs(deptId).subscribe((response: any) => {
       this.staffs = response.data;
       if (response.statusCode === 200 && response.message === "Staff retrieved Successfully") {
         this.showTable = true;
-        this.toastrService.success("Staff retrieved Successfully");
+        this.toastrService.success("Staffs retrieved Successfully");
       }
       if (response.statusCode === 200 && response.message === "Staffs Not Found") {
-        this.toastrService.error("No Date Found");
+        this.showTable = false;
+        this.toastrService.warning("No Staffs Found");
       }
     });
 
@@ -54,10 +60,11 @@ export class StaffListComponent implements OnInit {
   }
   updateAvailability(staff: Staff) {
     const isAvailable = !staff.isAvailable;
-    this.staffService.updateStaffAvailability(Number(staff.id), isAvailable).subscribe((response: any) => {
+    this.staffService.updateStaffAvailability(staff.id, isAvailable).subscribe((response: any) => {
       this.staff = response.data;
       if (response.statusCode === 200) {
         staff.isAvailable = isAvailable;
+        this.toastrService.success("Student Status Updated Successfully!!");
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 422) {

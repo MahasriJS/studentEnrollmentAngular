@@ -9,12 +9,12 @@ export class Student {
     dob: Date;
     dateOfJoining: Date;
     email:string;
-    isAvailable:boolean;
+    isAvailable:boolean=true;
     academicYear:string;
-    password:string;
-    deptId:Department;
-    courseId:Course;
-    semId:Semester;
+    password?:string;
+    deptId:number;
+    courseId:number;
+    semId:number;
     id?: number;
     department?:Department;
     course?:Course;

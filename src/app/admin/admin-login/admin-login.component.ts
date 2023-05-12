@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Staff } from 'src/app/model/staff';
 import { StaffService } from 'src/app/services/staff.service';
 
 @Component({
@@ -14,36 +13,37 @@ import { StaffService } from 'src/app/services/staff.service';
 export class AdminLoginComponent implements OnInit {
 
   reactiveForm: FormGroup;
-  //staff: Staff;
-  staff: number;
+  staffId: number;
   constructor(private staffService: StaffService, private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.reactiveForm = new FormGroup({
-      email: new FormControl(null, Validators.required),
+      email: new FormControl(null, Validators.email),
       password: new FormControl(null, Validators.required),
     });
   }
   get reactiveFormControl() {
     return this.reactiveForm.controls;
   }
-  onSubmit(): void {
-    const email = this.reactiveForm.get('email').value;
-    const password = this.reactiveForm.get('password').value;
-    const userType = "Admin";
+  adminLogin(): void {
+    const email: string = this.reactiveForm.get('email').value;
+    const password: string = this.reactiveForm.get('password').value;
+    const userType: string = "Admin";
     this.staffService.adminLogin(email, password, userType).subscribe((response: any) => {
-      this.staff = response.data;
-      const id = this.staff;
-      localStorage.setItem('id', id.toString());
-      if (response.statusCode === 200 && response.message === "Login Successfully!!") {
+      this.staffId = response.data;
+      localStorage.setItem('adminId', this.staffId.toString());
+      if (response.statusCode === 200 && response.message === "Logged in Successfully!!") {
         this.router.navigate(['/home']);
+        this.toastrService.success("Logged in Successfully!!")
       }
     }, (err: HttpErrorResponse) => {
       if (err.status === 422 && err.error.message === "staff not found") {
-        this.toastrService.error("Not found");
+        this.toastrService.error("Invalid Username and Password");
+        this.reactiveForm.reset();
       }
-      if (err.status === 422 && err.error.message === "Invalid username or password") {
-        this.toastrService.error("Invaild email or Password");
+      if (err.status === 422 && err.error.message === "Email Not Found") {
+        this.toastrService.error("Invalid Username");
+        this.reactiveForm.reset();
       }
     });
   }

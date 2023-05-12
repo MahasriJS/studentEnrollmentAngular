@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Course } from 'src/app/model/course';
 import { CourseType } from 'src/app/model/course-type';
@@ -27,29 +27,47 @@ export class EditStudentComponent implements OnInit {
   academicYears: string[];
   courseTypes: CourseType[];
   semesters: Semester[];
+  courseMap: Map<String, Course>;
+  deptMap: Map<String, Department>;
   constructor(private studentService: StudentService, private route: ActivatedRoute,
     private toastrService: ToastrService, private departmentService: DepartmentService,
     private courseService: CourseService, private courseTypeService: CoursetypeService,
-    private semesterService: SemesterService) { }
+    private semesterService: SemesterService, private router: Router) { }
 
   ngOnInit() {
     this.studentService.getAcademicYear()
       .subscribe((response: any) => {
         this.academicYears = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Academic Years Not Found");
+        }
       });
     this.departmentService.getDepartments()
       .subscribe((response: any) => {
         this.departments = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("Departments Not Found");
+        }
+        this.deptMap = new Map<String, Department>();
+        this.departments.forEach(department => {
+          this.deptMap.set(department.name, department);
+        });
       });
     this.courseTypeService.getCourseTypes()
       .subscribe((response: any) => {
         this.courseTypes = response.data;
+      }, (err: HttpErrorResponse) => {
+        if (err.status === 422) {
+          this.toastrService.error("CourseTypes Not Found");
+        }
       });
     this.reactiveForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
       email: new FormControl(null, Validators.email),
-      phno: new FormControl(null, Validators.required),
+      phno: new FormControl(null, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")),
       dob: new FormControl(null, Validators.required),
       dateOfJoining: new FormControl(null, Validators.required),
       academicYear: new FormControl(null, Validators.required),
@@ -62,41 +80,63 @@ export class EditStudentComponent implements OnInit {
   }
   getStudentById() {
     const id: number = Number(this.route.snapshot.params.id);
-    this.studentService.getStudentById(Number(id)).subscribe((response: any) => {
+    this.studentService.getStudentById(id).subscribe((response: any) => {
       this.student = response.data;
-      console.log(this.student.name);
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Student Not Found");
+      }
     });
   }
-  getCoursesByDepartmentAndCourseType(deptId: number, courseTypeId: number): void {
-    this.courseService.getCourses(Number(deptId), Number(courseTypeId)).subscribe((response: any) => {
-      this.courses = response.data;
-    });
+  get reactiveFormControl() {
+    return this.reactiveForm.controls;
   }
 
-  getSemestersByCourseType(courseTypeId: number): void {
-    this.semesterService.getSemesters(Number(courseTypeId)).subscribe((response: any) => {
-      this.semesters = response.data;
+  getCoursesByDepartmentAndCourseType(): void {
+    const deptName:string = this.reactiveForm.get('department').value;
+    let department: Department = this.deptMap.get(deptName);
+    const courseTypeId:number = this.reactiveForm.get('courseType').value;
+    this.courseService.getCourses(department.id, courseTypeId).subscribe((response: any) => {
+      this.courses = response.data;
+      this.courseMap = new Map<String, Course>();
+      this.courses.forEach(course => {
+        this.courseMap.set(course.name, course);
+      });
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Courses Not Found");
+      }
     });
   }
-  onSubmit(): void {
-    console.log(this.student.name);
-    console.log(this.reactiveForm);
+  getSemestersByCourseType(courseTypeId: number): void {
+    this.semesterService.getSemesters(courseTypeId).subscribe((response: any) => {
+      this.semesters = response.data;
+    }, (err: HttpErrorResponse) => {
+      if (err.status === 422) {
+        this.toastrService.error("Semesters Not Found");
+
+      }
+    });
+  }
+  editStudent(): void {
+
     const id: number = Number(this.route.snapshot.params.id);
-    //const student = this.reactiveForm.value;
     this.studentService.updateStudent(id, this.student)
       .subscribe((response: any) => {
         this.student = response.data;
         if (response.statusCode === 200) {
-          alert("Student Updated Successfully!!")
+          this.toastrService.success("Changes Saved Successfully!!")
+          this.router.navigate(['/student/list']);
         }
+
       }, (err: HttpErrorResponse) => {
         if (err.status === 422 && err.error.message === "Email is already exists.") {
           alert("Email is already exists.");
-          
+
         }
         if (err.status === 422 && err.error.message === "Phno is already exists.") {
           alert("Phno is already exists.");
-          
+
         }
         if (err.status === 422 && err.error.message === "Check  email or phone Pattern") {
           alert("Check email or phone Pattern");

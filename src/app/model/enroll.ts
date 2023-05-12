@@ -1,4 +1,4 @@
-export class Enrolls {
+export class Enroll {
     staffName: string;
     subjectName: string;
     subjectCode :string;
